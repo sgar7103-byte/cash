@@ -18,85 +18,49 @@
   </style>
 </head>
 <body>
-
   <div class="card">
     <h1>Мастер на час (Алексей)</h1>
     <p style="text-align:center; color:#666; font-size:14px;">Отметьте нужные услуги:</p>
 
-    <!-- Список услуг -->
-    <label class="item">
-      <span><input type="checkbox" class="check" value="1000" data-name="Замена выключателя"> Замена выключателя</span>
-      <span class="price">от 1000 ₽</span>
-    </label>
+    <label class="item"><span><input type="checkbox" class="check" value="1000" data-name="Замена выключателя"> Замена выключателя</span><span class="price">от 1000 ₽</span></label>
+    <label class="item"><span><input type="checkbox" class="check" value="1000" data-name="Установка стиральной машины"> Установка стиральной машины</span><span class="price">от 1000 ₽</span></label>
+    <label class="item"><span><input type="checkbox" class="check" value="500" data-name="Сантехнические услуги"> Сантехнические услуги</span><span class="price">от 500 ₽</span></label>
+    <label class="item"><span><input type="checkbox" class="check" value="1000" data-name="Покраска (за 1 кв.м.)"> Покраска (за 1 кв.м.)</span><span class="price">от 1000 ₽</span></label>
+    <label class="item"><span><input type="checkbox" class="check" value="1000" data-name="Сварка"> Сварка</span><span class="price">от 1000 ₽</span></label>
 
-    <label class="item">
-      <span><input type="checkbox" class="check" value="1000" data-name="Установка стиральной машины"> Установка стиральной машины</span>
-      <span class="price">от 1000 ₽</span>
-    </label>
-
-    <label class="item">
-      <span><input type="checkbox" class="check" value="500" data-name="Сантехнические услуги"> Сантехнические услуги</span>
-      <span class="price">от 500 ₽</span>
-    </label>
-
-    <label class="item">
-      <span><input type="checkbox" class="check" value="1000" data-name="Покраска (за 1 кв.м.)"> Покраска (за 1 кв.м.)</span>
-      <span class="price">от 1000 ₽</span>
-    </label>
-
-    <label class="item">
-      <span><input type="checkbox" class="check" value="1000" data-name="Сварка"> Сварка</span>
-      <span class="price">от 1000 ₽</span>
-    </label>
-
-    <!-- Итоговая сумма -->
     <div class="total-box">
       <div style="font-size:14px; color:#666;">Примерная стоимость:</div>
       <div class="total-price">от <span id="total">0</span> ₽</div>
     </div>
 
-    <!-- Кнопка MAX -->
     <a href="#" id="max-btn" class="btn" target="_blank">💬 Отправить заказ в MAX</a>
-    
-    <!-- Телефон -->
     <a href="tel:+79300907656" class="phone">📞 +7 (930) 090-76-56</a>
   </div>
 
   <script>
-    // Простой скрипт для подсчета суммы
     const checks = document.querySelectorAll('.check');
     const totalEl = document.getElementById('total');
     const maxBtn = document.getElementById('max-btn');
-    const maxUrl = "https://max.ru/79495507256"; // Ссылка на MAX
+    const maxUrl = "https://max.ru/79495507256";
 
     function updateTotal() {
       let sum = 0;
       let items = [];
-      
       checks.forEach(c => {
         if (c.checked) {
           sum += parseInt(c.value);
           items.push(c.getAttribute('data-name'));
         }
       });
-      
       totalEl.innerText = sum;
-      
       let text = "Здравствуйте! Хочу заказать:\n" + items.map(i => "- " + i).join("\n") + "\n\nПримерная стоимость: от " + sum + " руб.";
       
-      maxBtn.onclick = function(e) {
-        // Копируем текст
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(text);
-        }
-        // Открываем MAX
+      maxBtn.onclick = function() {
+        if (navigator.clipboard) navigator.clipboard.writeText(text);
         maxBtn.href = maxUrl;
       };
     }
-
-    // Запускаем при клике на галочки
     checks.forEach(c => c.addEventListener('change', updateTotal));
   </script>
-
 </body>
 </html>
