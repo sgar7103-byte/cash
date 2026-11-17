@@ -8,9 +8,19 @@
     body { font-family: Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; color: #333; }
     .card { background: white; padding: 20px; border-radius: 12px; max-width: 400px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     h1 { text-align: center; font-size: 22px; margin-top: 0; }
-    .item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; cursor: pointer; }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+      gap: 10px;
+    }
     .item:last-child { border-bottom: none; }
-    .price { color: #2563eb; font-weight: bold; }
+    .item label { display: flex; align-items: flex-start; gap: 10px; flex: 1; cursor: pointer; }
+    .item input[type="checkbox"] { margin-top: 2px; flex-shrink: 0; width: 18px; height: 18px; }
+    .item span { font-size: 15px; line-height: 1.4; }
+    .price { color: #2563eb; font-weight: bold; white-space: nowrap; flex-shrink: 0; font-size: 15px; }
     .total-box { background: #eff6ff; padding: 20px; text-align: center; border-radius: 10px; margin-top: 20px; }
     .total-price { font-size: 28px; font-weight: bold; color: #2563eb; margin-top: 5px; }
     .btn { display: block; background: #7c3aed; color: white; text-align: center; padding: 18px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 16px; margin-top: 20px; }
@@ -22,17 +32,52 @@
     <h1>Мастер на час (Алексей)</h1>
     <p style="text-align:center; color:#666; font-size:14px;">Отметьте нужные услуги:</p>
 
-    <label class="item"><span><input type="checkbox" class="check" value="1000" data-name="Замена выключателя"> Замена выключателя</span><span class="price">от 1000 ₽</span></label>
-    <label class="item"><span><input type="checkbox" class="check" value="1000" data-name="Установка стиральной машины"> Установка стиральной машины</span><span class="price">от 1000 ₽</span></label>
-    <label class="item"><span><input type="checkbox" class="check" value="500" data-name="Сантехнические услуги"> Сантехнические услуги</span><span class="price">от 500 ₽</span></label>
-    <label class="item"><span><input type="checkbox" class="check" value="1000" data-name="Покраска (за 1 кв.м.)"> Покраска (за 1 кв.м.)</span><span class="price">от 1000 ₽</span></label>
-    <label class="item"><span><input type="checkbox" class="check" value="1000" data-name="Сварка"> Сварка</span><span class="price">от 1000 ₽</span></label>
+    <div class="item">
+      <label>
+        <input type="checkbox" class="check" value="1000" data-name="Замена выключателя">
+        <span>Замена выключателя</span>
+      </label>
+      <span class="price">от 1000 ₽</span>
+    </div>
+
+    <div class="item">
+      <label>
+        <input type="checkbox" class="check" value="1000" data-name="Установка стиральной машины">
+        <span>Установка стиральной машины</span>
+      </label>
+      <span class="price">от 1000 ₽</span>
+    </div>
+
+    <div class="item">
+      <label>
+        <input type="checkbox" class="check" value="500" data-name="Сантехнические услуги">
+        <span>Сантехнические услуги</span>
+      </label>
+      <span class="price">от 500 ₽</span>
+    </div>
+
+    <div class="item">
+      <label>
+        <input type="checkbox" class="check" value="1000" data-name="Покраска (за 1 кв.м.)">
+        <span>Покраска (за 1 кв.м.)</span>
+      </label>
+      <span class="price">от 1000 ₽</span>
+    </div>
+
+    <div class="item">
+      <label>
+        <input type="checkbox" class="check" value="1000" data-name="Сварка">
+        <span>Сварка</span>
+      </label>
+      <span class="price">от 1000 ₽</span>
+    </div>
 
     <div class="total-box">
       <div style="font-size:14px; color:#666;">Примерная стоимость:</div>
       <div class="total-price">от <span id="total">0</span> ₽</div>
     </div>
 
+    <!-- Ссылка на MAX обновлена -->
     <a href="#" id="max-btn" class="btn" target="_blank">💬 Отправить заказ в MAX</a>
     <a href="tel:+79300907656" class="phone">📞 +7 (930) 090-76-56</a>
   </div>
@@ -41,7 +86,8 @@
     const checks = document.querySelectorAll('.check');
     const totalEl = document.getElementById('total');
     const maxBtn = document.getElementById('max-btn');
-    const maxUrl = "https://max.ru/79495507256";
+    // Твоя новая ссылка на профиль в MAX
+    const maxUrl = "https://max.ru/u/f9LHodD0cOLzZ40CiCBvnycYq8nVppDsZX0LOrQ6Q3FoNwNUDW8gVAaUmwA"; 
 
     function updateTotal() {
       let sum = 0;
