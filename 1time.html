@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Мастер на час | Алексей</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+    .card { background: white; padding: 20px; border-radius: 12px; max-width: 400px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; font-size: 22px; margin-top: 0; }
+    .item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; cursor: pointer; }
+    .item:last-child { border-bottom: none; }
+    .price { color: #2563eb; font-weight: bold; }
+    .total-box { background: #eff6ff; padding: 20px; text-align: center; border-radius: 10px; margin-top: 20px; }
+    .total-price { font-size: 28px; font-weight: bold; color: #2563eb; margin-top: 5px; }
+    .btn { display: block; background: #7c3aed; color: white; text-align: center; padding: 18px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 16px; margin-top: 20px; }
+    .phone { display: block; text-align: center; margin-top: 20px; color: #2563eb; font-size: 18px; font-weight: bold; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Мастер на час (Алексей)</h1>
+    <p style="text-align:center; color:#666; font-size:14px;">Отметьте нужные услуги:</p>
+
+    <!-- Список услуг -->
+    <label class="item">
+      <span><input type="checkbox" class="check" value="1000" data-name="Замена выключателя"> Замена выключателя</span>
+      <span class="price">от 1000 ₽</span>
+    </label>
+
+    <label class="item">
+      <span><input type="checkbox" class="check" value="1000" data-name="Установка стиральной машины"> Установка стиральной машины</span>
+      <span class="price">от 1000 ₽</span>
+    </label>
+
+    <label class="item">
+      <span><input type="checkbox" class="check" value="500" data-name="Сантехнические услуги"> Сантехнические услуги</span>
+      <span class="price">от 500 ₽</span>
+    </label>
+
+    <label class="item">
+      <span><input type="checkbox" class="check" value="1000" data-name="Покраска (за 1 кв.м.)"> Покраска (за 1 кв.м.)</span>
+      <span class="price">от 1000 ₽</span>
+    </label>
+
+    <label class="item">
+      <span><input type="checkbox" class="check" value="1000" data-name="Сварка"> Сварка</span>
+      <span class="price">от 1000 ₽</span>
+    </label>
+
+    <!-- Итоговая сумма -->
+    <div class="total-box">
+      <div style="font-size:14px; color:#666;">Примерная стоимость:</div>
+      <div class="total-price">от <span id="total">0</span> ₽</div>
+    </div>
+
+    <!-- Кнопка MAX -->
+    <a href="#" id="max-btn" class="btn" target="_blank">💬 Отправить заказ в MAX</a>
+    
+    <!-- Телефон -->
+    <a href="tel:+79300907656" class="phone">📞 +7 (930) 090-76-56</a>
+  </div>
+
+  <script>
+    // Простой скрипт для подсчета суммы
+    const checks = document.querySelectorAll('.check');
+    const totalEl = document.getElementById('total');
+    const maxBtn = document.getElementById('max-btn');
+    const maxUrl = "https://max.ru/79495507256"; // Ссылка на MAX
+
+    function updateTotal() {
+      let sum = 0;
+      let items = [];
+      
+      checks.forEach(c => {
+        if (c.checked) {
+          sum += parseInt(c.value);
+          items.push(c.getAttribute('data-name'));
+        }
+      });
+      
+      totalEl.innerText = sum;
+      
+      let text = "Здравствуйте! Хочу заказать:\n" + items.map(i => "- " + i).join("\n") + "\n\nПримерная стоимость: от " + sum + " руб.";
+      
+      maxBtn.onclick = function(e) {
+        // Копируем текст
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text);
+        }
+        // Открываем MAX
+        maxBtn.href = maxUrl;
+      };
+    }
+
+    // Запускаем при клике на галочки
+    checks.forEach(c => c.addEventListener('change', updateTotal));
+  </script>
+
+</body>
+</html>
