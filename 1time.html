@@ -68,13 +68,16 @@
       display: flex; align-items: center; justify-content: center; gap: 8px;
       margin-top: 16px; color: #007aff; font-size: 17px; font-weight: 600; text-decoration: none; 
     }
+    
+    /* Улучшенное всплывающее окно */
     .toast {
-      position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-      background: #1c1c1e; color: white; padding: 12px 24px; border-radius: 30px;
-      font-size: 14px; font-weight: 500; transition: bottom 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; white-space: nowrap;
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
+      background: rgba(28, 28, 30, 0.95); color: white; padding: 16px 24px; border-radius: 16px;
+      font-size: 15px; font-weight: 500; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000; text-align: center;
+      opacity: 0; pointer-events: none; width: 80%; max-width: 300px; backdrop-filter: blur(10px);
     }
-    .toast.show { bottom: 30px; }
+    .toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   </style>
 </head>
 <body>
@@ -142,13 +145,12 @@
         <span class="price">от 1000 ₽</span>
       </label>
 
-      <!-- Сайт показывает эту сумму -->
       <div class="total-box">
         <div class="total-label">Примерная стоимость:</div>
         <div class="total-price">от <span id="total">0</span> ₽</div>
       </div>
 
-      <a href="https://max.ru/u/f9LHodD0cOLzZ40CiCBvnycYq8nVppDsZX0LOrQ6Q3FoNwNUDW8gVAaUmwA" id="max-btn" class="btn" target="_blank">
+      <a href="https://max.ru/u/f9LHodD0cOLzZ40CiCBvnycYq8nVppDsZX0LOrQ6Q3FoNwNUDW8gVAaUmwA" id="max-btn" class="btn">
         <span>💬</span> Отправить в MAX
       </a>
       
@@ -158,7 +160,8 @@
     </div>
   </div>
 
-  <div id="toast" class="toast">✅ Список услуг скопирован! Вставьте его в чат</div>
+  <!-- Само всплывающее окно -->
+  <div id="toast" class="toast">✅ Текст скопирован!<br>Открываем мессенджер...</div>
 
   <script>
     const checks = document.querySelectorAll('.check');
@@ -177,10 +180,8 @@
         }
       });
       
-      // Обновляем сумму только на сайте
       totalEl.innerText = sum;
       
-      // А в сообщение для мастера сумму НЕ пишем
       let text = "";
       if (items.length > 0) {
         text = "Здравствуйте! Нужно выполнить:\n" + items.map(i => "• " + i).join("\n") + "\n\nПодскажите, пожалуйста, стоимость и когда сможете приехать?";
@@ -188,22 +189,28 @@
         text = "Здравствуйте! Хочу узнать стоимость услуг.";
       }
       
-      maxBtn.onclick = function() {
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(text).then(() => {
+      // Перехватываем клик, чтобы показать уведомление ДО перехода
+      maxBtn.onclick = function(e) {
+        e.preventDefault(); // Останавливаем мгновенный переход по ссылке
+        
+        const openMax = () => {
             showToast();
-          });
+            // Ждем 1.5 секунды, чтобы человек прочитал, и открываем ссылку
+            setTimeout(() => {
+                window.location.href = maxBtn.href;
+            }, 1500);
+        };
+
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).then(openMax).catch(openMax);
         } else {
-          showToast();
+          openMax();
         }
       };
     }
     
     function showToast() {
       toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
     }
     
     checks.forEach(c => c.addEventListener('change', updateTotal));
