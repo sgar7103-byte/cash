@@ -1,1 +1,332 @@
-<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Мастер на час | Алексей</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);color:#1c1c1e;padding:16px;line-height:1.4;min-height:100vh}.container{max-width:420px;margin:0 auto}.header{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);padding:20px;border-radius:20px;display:flex;align-items:center;gap:16px;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,0.08);border:1px solid rgba(255,255,255,0.5)}.avatar{width:60px;height:60px;background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}.header-info h1{font-size:20px;font-weight:800;margin-bottom:2px;letter-spacing:-0.5px}.rating{font-size:13px;color:#ff9500;display:flex;align-items:center;gap:4px;font-weight:600;margin-bottom:2px}.online{font-size:12px;color:#34c759;display:flex;align-items:center;gap:6px;font-weight:600}.online::before{content:'';display:block;width:8px;height:8px;background:#34c759;border-radius:50%;box-shadow:0 0 5px #34c759}.benefits{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}.benefit{background:rgba(255,255,255,0.9);padding:12px;border-radius:14px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.04);color:#333}.progress-bar{display:flex;gap:6px;margin-bottom:16px}.progress-step{flex:1;height:6px;background:#e2e8f0;border-radius:6px;transition:background 0.3s}.progress-step.active{background:#7c3aed}.card{background:rgba(255,255,255,0.98);padding:24px;border-radius:24px;box-shadow:0 12px 32px rgba(0,0,0,0.1);border:1px solid #fff;position:relative;overflow:hidden;margin-bottom:16px}.step{display:none;animation:fadeIn 0.3s ease}.step.active{display:block}.card-title{font-size:18px;font-weight:800;margin-bottom:16px;border-bottom:1px solid #f2f2f7;padding-bottom:12px;letter-spacing:-0.5px}.service-block{border-bottom:1px solid #f2f2f7}.service-block:last-child{border-bottom:none}.item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;cursor:pointer}.item-left{display:flex;align-items:center;gap:12px;flex:1}.custom-check{width:24px;height:24px;border:2px solid #c7c7cc;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;flex-shrink:0}input[type="checkbox"]{display:none}input[type="checkbox"]:checked+.custom-check{background:#007aff;border-color:#007aff}input[type="checkbox"]:checked+.custom-check::after{content:'✔';color:white;font-size:14px}.item-text{font-size:15px;font-weight:600;color:#1c1c1e}.price{color:#007aff;font-weight:700;font-size:15px;white-space:nowrap;flex-shrink:0;margin-left:10px}.input-box{display:none;background:#f2f2f7;padding:12px 16px;border-radius:12px;margin-bottom:12px;align-items:center;gap:10px}.input-box.active{display:flex}.input-box label{font-size:14px;color:#1c1c1e;font-weight:600}.input-box input{width:70px;padding:8px;border:1px solid #c7c7cc;border-radius:8px;font-size:16px;text-align:center;outline:none;font-weight:800;color:#007aff}.input-box input:focus{border-color:#007aff}.input-box span{font-size:14px;color:#666}.nested-list{display:none;background:#f8f9fa;border-radius:10px;padding:2px 10px;margin-bottom:10px;border:1px solid #eaeaea}.nested-list.active{display:block;animation:fadeIn 0.3s ease}.sub-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #eaeaea}.sub-item:last-child{border-bottom:none}.sub-item label{display:flex;align-items:center;gap:8px;font-size:13px;flex:1;cursor:pointer;color:#333;font-weight:500}.custom-check-sub{width:18px;height:18px;border:2px solid #c7c7cc;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}.sub-check:checked+.custom-check-sub{background:#007aff;border-color:#007aff}.sub-check:checked+.custom-check-sub::after{content:'✔';color:white;font-size:10px}.sub-item .sub-price{font-size:13px;color:#007aff;font-weight:700;display:flex;align-items:center;gap:4px}.sub-input{width:35px;padding:2px 4px;border:1px solid #ccc;border-radius:6px;text-align:center;font-size:13px;color:#007aff;font-weight:800;outline:none}.sub-input:focus{border-color:#007aff}.size-select{font-size:12px;padding:4px;border:1px solid #c7c7cc;border-radius:6px;color:#333;outline:none;background:#fff;font-weight:600;margin-right:4px}.input-group{margin-bottom:16px}.input-group label{display:block;font-size:14px;font-weight:600;margin-bottom:6px;color:#1c1c1e}.form-input{width:100%;padding:12px;border:1px solid #c7c7cc;border-radius:10px;font-size:15px;outline:none;background:#f8f9fa;transition:border-color 0.2s}.form-input:focus{border-color:#007aff;background:#fff}.time-options{display:flex;gap:8px}.time-options label{flex:1;display:flex;align-items:center;justify-content:center;padding:12px;background:#f8f9fa;border-radius:10px;border:1px solid #c7c7cc;font-size:14px;cursor:pointer;font-weight:600;color:#333;transition:all 0.2s;text-align:center}.time-options input[type="radio"]{display:none}.time-options label.active{border-color:#007aff;background:#e3f2fd;color:#007aff}.total-container{display:flex;gap:10px;margin-top:20px}.total-box{flex:1;background:#f2f2f7;padding:16px;border-radius:16px;text-align:center}.total-label{font-size:13px;color:#8e8e93;margin-bottom:4px;font-weight:600}.total-price{font-size:24px;font-weight:800;color:#1c1c1e;letter-spacing:-0.5px}.btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#7c3aed;color:white;text-align:center;padding:16px;border-radius:16px;text-decoration:none;font-weight:700;font-size:16px;margin-top:20px;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 6px 16px rgba(124,58,237,0.3);animation:pulse 2s infinite;border:none;cursor:pointer;width:100%}.btn:active{transform:scale(0.98)}.btn-outline{background:#fff;color:#7c3aed;border:2px solid #7c3aed;box-shadow:none;animation:none}.btn-outline:active{transform:scale(0.98)}.step-nav{display:flex;gap:10px;margin-top:16px}.phone{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;color:#007aff;font-size:17px;font-weight:700;text-decoration:none}.safe-deal{background:#e8f5e9;color:#2e7d32;padding:10px;border-radius:10px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px}.disclaimer{text-align:center;margin-top:16px;font-size:11px;color:#888;line-height:1.3;padding:0 10px;font-weight:500}.reviews-card{margin-top:16px;background:rgba(255,255,255,0.9);padding:20px;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,0.06)}.review{border-bottom:1px solid #f2f2f7;padding-bottom:12px;margin-bottom:12px}.review:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}.review-stars{color:#ff9500;font-size:12px;margin-bottom:4px}.review-text{font-size:14px;font-weight:500;font-style:italic;margin-bottom:4px;color:#333}.review-author{font-size:12px;color:#8e8e93;text-align:right}.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.9);background:rgba(28,28,30,0.95);color:white;padding:16px 24px;border-radius:16px;font-size:15px;font-weight:600;transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:1000;text-align:center;opacity:0;pointer-events:none;width:80%;max-width:300px;backdrop-filter:blur(10px)}.toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(124,58,237,0.5)}70%{box-shadow:0 0 0 12px rgba(124,58,237,0)}100%{box-shadow:0 0 0 0 rgba(124,58,237,0)}}@keyframes fadeIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}.footer{text-align:center;margin-top:20px;font-size:12px;color:#666;font-weight:600}</style></head><body><div class="container"><div class="header"><div class="avatar">👷‍♂️</div><div class="header-info"><h1>Алексей</h1><div class="rating">⭐⭐⭐⭐⭐ 4.9 <span style="color:#8e8e93;font-weight:500;font-size:11px;">(48 отзывов)</span></div><div class="online">Онлайн, готов к работе</div></div></div><div class="benefits"><div class="benefit">⚡ Выезд сегодня</div><div class="benefit">🛠 Свой инструмент</div><div class="benefit">💰 Без предоплаты</div><div class="benefit">✅ Гарантия</div></div><div class="progress-bar"><div class="progress-step active" data-step="1"></div><div class="progress-step" data-step="2"></div><div class="progress-step" data-step="3"></div></div><div class="card"><div class="step active" id="step-1"><div class="card-title">Шаг 1: Выберите услуги</div><div class="service-block"><label class="item"><div class="item-left"><input type="checkbox" class="check" data-name="Замена выключателя" data-price="1000" data-unit="шт." data-time="0.5"><div class="custom-check"></div><span class="item-text">Замена выключателя</span></div><span class="price">1000 ₽/шт.</span></label><div class="input-box"><label>Кол-во:</label><input type="number" class="qty" value="1" min="1" step="1"><span>шт.</span></div></div><div class="service-block"><label class="item"><div class="item-left"><input type="checkbox" class="check" data-name="Установка стиральной машины" data-price="1000" data-unit="шт." data-time="1"><div class="custom-check"></div><span class="item-text">Установка стиральной машины</span></div><span class="price">1000 ₽/шт.</span></label><div class="input-box"><label>Кол-во:</label><input type="number" class="qty" value="1" min="1" step="1"><span>шт.</span></div></div><div class="service-block"><label class="item accordion-trigger"><div class="item-left"><input type="checkbox" class="main-check"><div class="custom-check"></div><span class="item-text">Электрика</span></div><span class="price">от 500 ₽</span></label><div class="nested-list"><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Установка розетки" data-price="500" data-unit="шт." data-time="0.5"><div class="custom-check-sub"></div> Розетка</label><div class="sub-price">500 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Монтаж люстры" data-price="800" data-unit="шт." data-time="1"><div class="custom-check-sub"></div> Люстра</label><div class="sub-price">800 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Монтаж проводки" data-price="1000" data-unit="м." data-time="1"><div class="custom-check-sub"></div> Проводка</label><div class="sub-price">1000 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div></div></div><div class="service-block"><label class="item accordion-trigger"><div class="item-left"><input type="checkbox" class="main-check"><div class="custom-check"></div><span class="item-text">Сантехника</span></div><span class="price">от 500 ₽</span></label><div class="nested-list"><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Установка смесителя" data-price="500" data-unit="шт." data-time="0.5"><div class="custom-check-sub"></div> Смеситель</label><div class="sub-price">500 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Установка душа" data-price="800" data-unit="шт." data-time="1"><div class="custom-check-sub"></div> Душ</label><div class="sub-price">800 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Установка унитаза" data-price="1500" data-unit="шт." data-time="1.5"><div class="custom-check-sub"></div> Унитаз</label><div class="sub-price">1500 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Устранение протечки" data-price="500" data-unit="шт." data-time="1"><div class="custom-check-sub"></div> Протечка</label><div class="sub-price">500 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div></div></div><div class="service-block"><label class="item accordion-trigger"><div class="item-left"><input type="checkbox" class="main-check"><div class="custom-check"></div><span class="item-text">Сборка мебели</span></div><span class="price">от 400 ₽</span></label><div class="nested-list"><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Сборка шкафа" data-unit="шт." data-time="2.5"><div class="custom-check-sub"></div> Шкаф</label><div class="sub-price"><select class="size-select" data-default-price="1500"><option value="1000">Малый</option><option value="1500" selected>Средний</option><option value="2500">Большой</option></select> <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Сборка комода" data-price="800" data-unit="шт." data-time="1"><div class="custom-check-sub"></div> Комод</label><div class="sub-price">800 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Сборка кухни" data-unit="шт." data-time="4"><div class="custom-check-sub"></div> Кухня</label><div class="sub-price"><select class="size-select" data-default-price="3000"><option value="3000" selected>Прямая</option><option value="4500">Угловая</option><option value="6000">П-образная</option></select> <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Сборка стола/стула" data-price="400" data-unit="шт." data-time="0.5"><div class="custom-check-sub"></div> Стол / Стул</label><div class="sub-price">400 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div></div></div><div class="service-block"><label class="item accordion-trigger"><div class="item-left"><input type="checkbox" class="main-check"><div class="custom-check"></div><span class="item-text">Монтаж техники</span></div><span class="price">от 1000 ₽</span></label><div class="nested-list"><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Монтаж телевизора" data-unit="шт." data-time="1"><div class="custom-check-sub"></div> Телевизор</label><div class="sub-price"><select class="size-select" data-default-price="1500"><option value="1000">до 32"</option><option value="1500" selected>32-55"</option><option value="2500">от 55"</option></select> <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Установка кондиционера" data-price="5000" data-unit="шт." data-time="4"><div class="custom-check-sub"></div> Кондиционер</label><div class="sub-price">5000 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div><div class="sub-item"><label><input type="checkbox" class="check sub-check" data-name="Установка бойлера" data-price="2000" data-unit="шт." data-time="2"><div class="custom-check-sub"></div> Бойлер</label><div class="sub-price">2000 ₽ <input type="number" class="qty sub-qty sub-input" value="1" min="1" style="display:none;"></div></div></div></div><div class="service-block"><label class="item"><div class="item-left"><input type="checkbox" class="check" data-name="Покраска стен" data-price="1000" data-unit="кв.м." data-time="0.5"><div class="custom-check"></div><span class="item-text">Покраска стен</span></div><span class="price">1000 ₽/кв.м.</span></label><div class="input-box"><label>Площадь:</label><input type="number" class="qty" value="1" min="1" step="1"><span>кв.м.</span></div><div class="material-hint" id="paint-hint"></div></div><div class="service-block"><label class="item"><div class="item-left"><input type="checkbox" class="check" data-name="Сварка (швы/конструкции)" data-price="1000" data-unit="п.м." data-time="0.5"><div class="custom-check"></div><span class="item-text">Сварка (швы/конструкции)</span></div><span class="price">1000 ₽/п.м.</span></label><div class="input-box"><label>Длина:</label><input type="number" class="qty" value="1" min="1" step="1"><span>п.м.</span></div></div><div class="step-nav"><button class="btn btn-outline" onclick="nextStep(2)">Далее →</button></div></div><div class="step" id="step-2"><div class="card-title">Шаг 2: Контакты и время</div><div class="input-group"><label>Ваше имя</label><input type="text" id="client-name" class="form-input" placeholder="Например, Иван"></div><div class="input-group"><label>Адрес / Район</label><input type="text" id="client-address" class="form-input" placeholder="Улица, дом или район"></div><div class="input-group"><label>Когда удобно приехать?</label><div class="time-options"><label><input type="radio" name="time" value="Сегодня" checked> Сегодня</label><label><input type="radio" name="time" value="Завтра"> Завтра</label><label><input type="radio" name="time" value="В выходные"> Выходные</label></div></div><div class="urgent-toggle"><span>🔥 Срочный вызов (+20%)</span><label class="switch"><input type="checkbox" id="urgent-check"><span class="slider"></span></label></div><div class="step-nav"><button class="btn btn-outline" onclick="nextStep(1)">← Назад</button><button class="btn" onclick="nextStep(3)">Далее →</button></div></div><div class="step" id="step-3"><div class="card-title">Шаг 3: Проверьте заказ</div><div id="summary-list" style="font-size:14px;line-height:1.6;margin-bottom:16px"></div><div class="total-container"><div class="total-box"><div class="total-label">Итоговая стоимость:</div><div class="total-price">от <span id="total-3">0</span> ₽</div></div></div><a href="https://max.ru/u/f9LHodD0cOLzZ40CiCBvnycYq8nVppDsZX0LOrQ6Q3FoNwNUDW8gVAaUmwA" id="max-btn" class="btn"><span>💬</span> Отправить в MAX</a><div class="safe-deal">🛡️ Безопасная сделка. Оплата после работ.</div><div class="disclaimer">* Точная стоимость работ и материалов рассчитывается мастером после осмотра объекта.</div><div class="step-nav"><button class="btn btn-outline" onclick="nextStep(2)">← Назад</button></div></div></div><div class="reviews-card"><div class="card-title">Отзывы клиентов</div><div class="review"><div class="review-stars">⭐⭐⭐⭐⭐</div><div class="review-text">"Собрал шкаф-купе за 2 часа, все аккуратно. Рекомендую!"</div><div class="review-author">— Мария, Центральный район</div></div><div class="review"><div class="review-stars">⭐⭐⭐⭐⭐</div><div class="review-text">"Поменял смеситель и повесил телевизор. Приехал быстро, взял недорого."</div><div class="review-author">— Дмитрий, ул. Мира</div></div></div><div class="footer">Оплата только после выполнения работ. Ваши данные защищены.</div></div><div id="toast" class="toast">✅ Текст скопирован!<br>Открываем мессенджер...</div><script>let currentStep=1;const maxBtn=document.getElementById('max-btn');const toast=document.getElementById('toast');const urgentCheck=document.getElementById('urgent-check');const clientName=document.getElementById('client-name');const clientAddress=document.getElementById('client-address');const paintHint=document.getElementById('paint-hint');function nextStep(n){document.querySelectorAll('.step').forEach((s,i)=>s.classList.toggle('active',i+1===n));document.querySelectorAll('.progress-step').forEach((s,i)=>s.classList.toggle('active',i+1<=n));currentStep=n;updateTotal();window.scrollTo({top:0,behavior:'smooth'})}function toggleAccordion(e){e.preventDefault();const trigger=e.currentTarget;const list=trigger.nextElementSibling;const visual=trigger.querySelector('.custom-check');const isActive=list.classList.contains('active');if(isActive){list.classList.remove('active');visual.style.background='transparent';visual.style.borderColor='#c7c7cc';visual.innerHTML='';list.querySelectorAll('.sub-check').forEach(c=>{c.checked=false;const box=c.closest('.sub-item');const qty=box.querySelector('.sub-qty');if(qty){qty.style.display='none';qty.value=1}})}else{list.classList.add('active');visual.style.background='#007aff';visual.style.borderColor='#007aff';visual.innerHTML='✔';visual.style.color='white';visual.style.fontSize='14px';visual.style.display='flex';visual.style.alignItems='center';visual.style.justifyContent='center'}updateTotal()}document.querySelectorAll('.accordion-trigger').forEach(t=>t.addEventListener('click',toggleAccordion));document.querySelectorAll('.sub-check').forEach(sub=>{const box=sub.closest('.sub-item');const qty=box.querySelector('.sub-qty');const sel=box.querySelector('.size-select');sub.addEventListener('change',(e)=>{e.stopPropagation();if(qty)qty.style.display=sub.checked?'inline-block':'none';if(sub.checked&&qty)qty.focus();updateTotal()});if(qty)qty.addEventListener('input',(e)=>{e.stopPropagation();updateTotal()});if(sel)sel.addEventListener('change',updateTotal)});document.querySelectorAll('.check:not(.sub-check)').forEach(check=>{const block=check.closest('.service-block');if(!block.querySelector('.nested-list')){const inputBox=block.querySelector('.input-box');const qtyInput=block.querySelector('.qty');if(inputBox)check.addEventListener('change',()=>{inputBox.classList.toggle('active',check.checked);if(check.checked&&qtyInput)qtyInput.focus();updateTotal()});if(qtyInput)qtyInput.addEventListener('input',updateTotal)}});urgentCheck.addEventListener('change',updateTotal);document.querySelectorAll('input[name="time"]').forEach(radio=>{radio.addEventListener('change',(e)=>{document.querySelectorAll('.time-options label').forEach(l=>l.classList.remove('active'));e.target.closest('label').classList.add('active');if(currentStep===3)renderSummary()})});document.querySelector('input[name="time"]:checked').closest('label').classList.add('active');function getSelectedItems(){let items=[];document.querySelectorAll('.check').forEach(check=>{if(check.checked){const box=check.closest('.sub-item')||check.closest('.service-block');let price=parseFloat(check.dataset.price);let name=check.dataset.name;const sel=box.querySelector('.size-select');if(sel){price=parseFloat(sel.value);name+=' ('+sel.options[sel.selectedIndex].text+')'}const time=parseFloat(check.dataset.time)||0;const unit=check.dataset.unit;let qty=1;const qtyInput=box.querySelector('.qty');if(qtyInput)qty=parseFloat(qtyInput.value)||1;items.push({name,price,time,unit,qty})}});return items}function updateTotal(){const items=getSelectedItems();let sum=items.reduce((acc,i)=>acc+i.price*i.qty,0);if(urgentCheck.checked){sum*=1.2}if(sum>0&&sum<1500){sum+=500}document.getElementById('total-3').textContent=Math.round(sum);const paintCheck=document.querySelector('.check[data-name="Покраска стен"]');if(paintCheck&&paintCheck.checked){const qty=paintCheck.closest('.service-block').querySelector('.qty');const area=parseFloat(qty.value)||1;const liters=Math.ceil(area/5);paintHint.textContent='Примерный расход краски: ~'+liters+' л (в 2 слоя)';paintHint.classList.add('active')}else{paintHint.classList.remove('active')}if(currentStep===3)renderSummary()}function renderSummary(){const items=getSelectedItems();const list=document.getElementById('summary-list');if(items.length===0){list.innerHTML='<p style="color:#8e8e93">Ничего не выбрано</p>';return}const name=clientName.value.trim()||'Клиент';const address=clientAddress.value.trim()||'Не указан';const time=document.querySelector('input[name="time"]:checked').value;let html=`<div style="margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:10px"><div><b>Имя:</b> ${name}</div><div><b>Адрес:</b> ${address}</div><div><b>Время:</b> ${time}</div>${urgentCheck.checked?'<div style="color:#e65100;font-weight:bold;margin-top:4px;">🔥 Срочный вызов</div>':''}</div>`;html+=items.map(i=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f2f2f7"><span>${i.name} × ${i.qty} ${i.unit}</span><b>${Math.round(i.price*i.qty)} ₽</b></div>`).join('');list.innerHTML=html}maxBtn.addEventListener('click',(e)=>{e.preventDefault();const items=getSelectedItems();if(items.length===0){toast.textContent='Выберите хотя бы одну услугу!';toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2000);return}const name=clientName.value.trim()||'Клиент';const address=clientAddress.value.trim()||'Не указан';const time=document.querySelector('input[name="time"]:checked').value;let text=`Здравствуйте! Меня зовут ${name}.\n📍 Адрес: ${address}\n🕒 Время: ${time}\n\nНужно выполнить:\n`+items.map(i=>`• ${i.name} (${i.qty} ${i.unit})`).join('\n');if(urgentCheck.checked)text+='\n\n🔥 Срочный вызов!';navigator.clipboard.writeText(text).then(()=>{toast.classList.add('show');setTimeout(()=>{window.location.href=maxBtn.href},1500)}).catch(()=>{toast.classList.add('show');setTimeout(()=>{window.location.href=maxBtn.href},1500)})});updateTotal();</script></body></html>
+
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <title>Алексей — мастер на час</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root{--bg:#f3f5f8;--card:#fff;--ink:#172033;--muted:#697386;--line:#e6eaf0;--accent:#2563eb;--shadow:0 8px 24px rgba(20,35,60,.07)}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+    .wrap{max-width:720px;margin:0 auto;padding:18px 14px 40px}
+    .hero{background:linear-gradient(135deg,#111827,#253b61);color:#fff;border-radius:22px;padding:22px;box-shadow:var(--shadow)}
+    .top{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .brand{font-size:25px;font-weight:800;letter-spacing:.2px}
+    .online{font-size:12px;background:#174c39;color:#b9f6d4;border:1px solid #277553;border-radius:20px;padding:6px 10px;white-space:nowrap}
+    .sub{color:#d6deeb;margin:7px 0 14px}
+    .rating{font-size:14px;color:#fbd46a}
+    .benefits{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px}
+    .benefits span{font-size:12px;background:rgba(255,255,255,.1);padding:7px 10px;border-radius:30px}
+    .progress{display:flex;gap:7px;margin:18px 2px}
+    .dot{height:5px;flex:1;border-radius:9px;background:#dce2eb}
+    .dot.active{background:var(--accent)}
+    .step{display:none}
+    .step.active{display:block}
+    .section-title{font-size:21px;font-weight:800;margin:18px 2px 12px}
+    .service{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(20,35,60,.025)}
+    .service-head{display:flex;justify-content:space-between;gap:12px}
+    .service-name{font-weight:700}
+    .price{font-weight:800;white-space:nowrap}
+    .desc{font-size:13px;color:var(--muted);margin:4px 0 12px}
+    .controls{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .controls label{font-size:13px;color:var(--muted)}
+    .qty{display:flex;align-items:center;gap:10px}
+    .qty button{width:34px;height:34px;border:1px solid var(--line);background:#f8fafc;border-radius:10px;font-size:20px}
+    .qty output{min-width:18px;text-align:center;font-weight:700}
+    .panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(20,35,60,.025)}
+    .field{margin:12px 0}
+    .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    .field input,.field textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font:inherit;outline:none}
+    .field textarea{min-height:76px;resize:vertical}
+    .choice{display:flex;gap:9px;flex-wrap:wrap}
+    .choice label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff}
+    .urgent{display:flex;gap:10px;align-items:flex-start;background:#fff8e7;border:1px solid #f5d58b;border-radius:13px;padding:12px;margin:14px 0}
+    .urgent input{margin-top:4px}
+    .urgent small{display:block;color:#765b20}
+    .summary-row{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid var(--line)}
+    .summary-row:last-child{border:0}
+    .total{font-size:22px;font-weight:900}
+    .muted{color:var(--muted);font-size:13px}
+    .actions{display:flex;gap:10px;margin-top:16px}
+    .btn{border:0;border-radius:13px;padding:14px 16px;font-weight:800;font-size:16px;cursor:pointer;flex:1}
+    .primary{background:var(--accent);color:#fff}
+    .secondary{background:#e9eef6;color:#263247}
+    .btn:disabled{opacity:.55}
+    .notice{display:none;padding:12px;border-radius:12px;margin-top:12px;font-size:14px}
+    .notice.show{display:block}
+    .notice.error{background:#feecec;color:#9b1c1c}
+    .notice.ok{background:#e9f8ef;color:#176b37}
+    .footer{text-align:center;color:var(--muted);font-size:12px;margin:18px 0}
+    @media(min-width:600px){.wrap{padding-top:26px}.hero{padding:28px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="top">
+      <div class="brand">Алексей</div>
+      <div class="online">● На связи</div>
+    </div>
+    <div class="sub">Мастер на час · Помощь по дому</div>
+    <div class="rating">★★★★★ <span style="color:#e7edf7">Аккуратно · Надёжно · По договорённости</span></div>
+    <div class="benefits">
+      <span>Выезд по адресу</span>
+      <span>Понятная стоимость</span>
+      <span>Быстрая заявка</span>
+    </div>
+  </header>
+
+  <div class="progress">
+    <div class="dot active" id="dot1"></div>
+    <div class="dot" id="dot2"></div>
+    <div class="dot" id="dot3"></div>
+  </div>
+
+  <section class="step active" id="step1">
+    <div class="section-title">Выберите услуги</div>
+    <div id="services"></div>
+    <div class="panel">
+      <div class="summary-row"><span>Выбрано услуг</span><strong id="count">0</strong></div>
+      <div class="summary-row"><span>Предварительная стоимость</span><strong id="subtotal">0 ₽</strong></div>
+      <div class="muted">Точная стоимость может быть согласована с мастером после уточнения задачи.</div>
+    </div>
+    <div class="actions">
+      <button class="btn primary" onclick="goStep(2)">Продолжить</button>
+    </div>
+  </section>
+
+  <section class="step" id="step2">
+    <div class="section-title">Контактные данные</div>
+    <div class="panel">
+      <div class="field">
+        <label for="name">Ваше имя *</label>
+        <input id="name" autocomplete="name" placeholder="Как к вам обращаться">
+      </div>
+      <div class="field">
+        <label for="address">Адрес *</label>
+        <input id="address" autocomplete="street-address" placeholder="Улица, дом, квартира">
+      </div>
+      <div class="field">
+        <label>Когда удобно?</label>
+        <div class="choice">
+          <label><input type="radio" name="time" value="Сегодня" checked> Сегодня</label>
+          <label><input type="radio" name="time" value="Завтра"> Завтра</label>
+          <label><input type="radio" name="time" value="В ближайшие дни"> В ближайшие дни</label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="details">Комментарий (необязательно)</label>
+        <textarea id="details" placeholder="Опишите задачу или удобное время"></textarea>
+      </div>
+      <label class="urgent">
+        <input type="checkbox" id="urgent" onchange="renderTotals()">
+        <span><strong>Нужен срочный вызов</strong><small>Наценка за срочность +20%</small></span>
+      </label>
+    </div>
+    <div class="actions">
+      <button class="btn secondary" onclick="goStep(1)">Назад</button>
+      <button class="btn primary" onclick="goStep(3)">Посмотреть заявку</button>
+    </div>
+  </section>
+
+  <section class="step" id="step3">
+    <div class="section-title">Проверьте заявку</div>
+    <div class="panel" id="summary"></div>
+    <div class="panel">
+      <div class="summary-row"><span>Стоимость услуг</span><strong id="sumBase">0 ₽</strong></div>
+      <div class="summary-row"><span>Срочный вызов</span><strong id="sumUrgent">0 ₽</strong></div>
+      <div class="summary-row"><span>Итого</span><strong class="total" id="sumTotal">0 ₽</strong></div>
+    </div>
+    <div class="muted">После отправки мастер получит заявку и свяжется с вами для подтверждения деталей и стоимости.</div>
+    <div class="actions">
+      <button class="btn secondary" onclick="goStep(2)">Назад</button>
+      <button class="btn primary" id="sendBtn" onclick="sendOrder()">Отправить заявку</button>
+    </div>
+    <div class="notice" id="notice"></div>
+  </section>
+
+  <div class="footer">Заявка не является подтверждением заказа. Детали согласуются с мастером.</div>
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoOYxRmzuUwEHptIT8802Ffqqinpnl3cjZEZagmXf8g-Wnq9bfa3pN3d0L26mI7uVx/exec';
+
+const services = [
+  {id:'hour',name:'Мастер на час',price:1500,desc:'Мелкий бытовой ремонт и помощь по дому',unit:'час'},
+  {id:'furniture',name:'Сборка мебели',price:1200,desc:'Сборка и установка мебели',unit:'шт.'},
+  {id:'shelf',name:'Установка полки',price:700,desc:'Крепление полок и небольших конструкций',unit:'шт.'},
+  {id:'curtain',name:'Карниз / шторы',price:1000,desc:'Установка карнизов и креплений',unit:'шт.'},
+  {id:'tv',name:'Установка телевизора',price:1800,desc:'Крепление ТВ на стену (кронштейн отдельно)',unit:'шт.'},
+  {id:'kitchen',name:'Работы на кухне',price:1500,desc:'Мелкий монтаж и регулировка кухонной мебели',unit:'работа'},
+  {id:'plumbing',name:'Сантехнические мелочи',price:1200,desc:'Замена/установка простых элементов',unit:'работа'},
+  {id:'other',name:'Другая работа',price:1000,desc:'Опишите задачу в комментарии — уточним стоимость',unit:'работа'}
+];
+
+const quantities = {};
+services.forEach(s => quantities[s.id] = 0);
+
+const rub = n => Math.round(n).toLocaleString('ru-RU') + ' ₽';
+
+function renderServices(){
+  document.getElementById('services').innerHTML = services.map(s => `
+    <article class="service">
+      <div class="service-head">
+        <div class="service-name">${s.name}</div>
+        <div class="price">от ${rub(s.price)}</div>
+      </div>
+      <div class="desc">${s.desc}</div>
+      <div class="controls">
+        <label>Количество (${s.unit})</label>
+        <div class="qty">
+          <button type="button" aria-label="Уменьшить" onclick="changeQty('${s.id}',-1)">−</button>
+          <output id="qty-${s.id}">0</output>
+          <button type="button" aria-label="Увеличить" onclick="changeQty('${s.id}',1)">+</button>
+        </div>
+      </div>
+    </article>
+  `).join('');
+}
+
+function changeQty(id,delta){
+  quantities[id] = Math.max(0, quantities[id] + delta);
+  document.getElementById('qty-' + id).textContent = quantities[id];
+  renderTotals();
+}
+
+function baseTotal(){
+  return services.reduce((sum,s) => sum + s.price * quantities[s.id], 0);
+}
+
+function renderTotals(){
+  const base = baseTotal();
+  const urgent = document.getElementById('urgent').checked;
+  const total = base ? (urgent ? Math.round(base * 1.2) + (base * 1.2 < 1500 ? 500 : 0) : base) : 0;
+
+  document.getElementById('count').textContent =
+    Object.values(quantities).reduce((a,b) => a + b, 0);
+  document.getElementById('subtotal').textContent = rub(base);
+  document.getElementById('sumBase').textContent = rub(base);
+  document.getElementById('sumUrgent').textContent = rub(total - base);
+  document.getElementById('sumTotal').textContent = rub(total);
+
+  return {base,total,urgent};
+}
+
+function goStep(n){
+  if(n === 2 && baseTotal() === 0){
+    alert('Выберите хотя бы одну услугу.');
+    return;
+  }
+
+  if(n === 3){
+    const name = document.getElementById('name').value.trim();
+    const address = document.getElementById('address').value.trim();
+
+    if(!name || !address){
+      alert('Заполните имя и адрес.');
+      goStep(2);
+      return;
+    }
+
+    const chosen = services
+      .filter(s => quantities[s.id] > 0)
+      .map(s => `${s.name} — ${quantities[s.id]} × ${rub(s.price)} = ${rub(s.price * quantities[s.id])}`);
+
+    const t = renderTotals();
+    const time = document.querySelector('input[name="time"]:checked').value;
+    const details = document.getElementById('details').value.trim();
+
+    document.getElementById('summary').innerHTML = `
+      <div class="summary-row"><span>Имя</span><strong>${escapeHtml(name)}</strong></div>
+      <div class="summary-row"><span>Адрес</span><strong>${escapeHtml(address)}</strong></div>
+      <div class="summary-row"><span>Время</span><strong>${escapeHtml(time)}</strong></div>
+      ${chosen.map(x => `<div class="summary-row"><span>${escapeHtml(x)}</span></div>`).join('')}
+      <div class="summary-row"><span>Срочный вызов</span><strong>${t.urgent ? 'Да (+20%)' : 'Нет'}</strong></div>
+      ${details ? `<div class="summary-row"><span>Комментарий</span><strong>${escapeHtml(details)}</strong></div>` : ''}
+    `;
+  }
+
+  document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  [1,2,3].forEach(i => document.getElementById('dot' + i).classList.toggle('active', i <= n));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g, c => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+}
+
+async function sendOrder(){
+  const btn = document.getElementById('sendBtn');
+  const tg = window.Telegram && window.Telegram.WebApp;
+
+  if(!tg || !tg.initData){
+    showNotice('Откройте приложение через Telegram-бота, чтобы отправить заявку.','error');
+    return;
+  }
+
+  const t = renderTotals();
+  const chosen = services
+    .filter(s => quantities[s.id] > 0)
+    .map(s => `${s.name}: ${quantities[s.id]} × ${s.price} ₽`);
+
+  const data = {
+    initData: tg.initData,
+    name: document.getElementById('name').value.trim(),
+    address: document.getElementById('address').value.trim(),
+    time: document.querySelector('input[name="time"]:checked').value,
+    details: document.getElementById('details').value.trim(),
+    urgent: t.urgent ? 'Да (+20%)' : 'Нет',
+    services: chosen.join('\n'),
+    total: rub(t.total)
+  };
+
+  btn.disabled = true;
+  btn.textContent = 'Отправляем…';
+
+  try{
+    await fetch(SCRIPT_URL,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(data)
+    });
+
+    showNotice('Запрос передан. Дождитесь подтверждения мастера в Telegram.','ok');
+
+    if(tg.HapticFeedback){
+      tg.HapticFeedback.notificationOccurred('success');
+    }
+  }catch(err){
+    showNotice('Не удалось отправить заявку. Проверьте интернет и попробуйте ещё раз.','error');
+  }finally{
+    btn.disabled = false;
+    btn.textContent = 'Отправить заявку';
+  }
+}
+
+function showNotice(message,type){
+  const el = document.getElementById('notice');
+  el.textContent = message;
+  el.className = 'notice show ' + type;
+}
+
+renderServices();
+renderTotals();
+
+if(window.Telegram && window.Telegram.WebApp){
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
+}
+</script>
+</body>
+</html>
