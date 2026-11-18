@@ -2,153 +2,165 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#111827">
-  <title>Алексей — мастер на час</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    :root{--bg:#f3f5f8;--card:#fff;--ink:#172033;--muted:#697386;--line:#e6eaf0;--accent:#2563eb;--shadow:0 8px 24px rgba(20,35,60,.07)}
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-    .wrap{max-width:720px;margin:0 auto;padding:18px 14px 40px}
-    .hero{background:linear-gradient(135deg,#111827,#253b61);color:#fff;border-radius:22px;padding:22px;box-shadow:var(--shadow)}
-    .top{display:flex;justify-content:space-between;gap:12px;align-items:center}
-    .brand{font-size:25px;font-weight:800;letter-spacing:.2px}
-    .online{font-size:12px;background:#174c39;color:#b9f6d4;border:1px solid #277553;border-radius:20px;padding:6px 10px;white-space:nowrap}
-    .sub{color:#d6deeb;margin:7px 0 14px}
-    .rating{font-size:14px;color:#fbd46a}
-    .benefits{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px}
-    .benefits span{font-size:12px;background:rgba(255,255,255,.1);padding:7px 10px;border-radius:30px}
-    .progress{display:flex;gap:7px;margin:18px 2px}
-    .dot{height:5px;flex:1;border-radius:9px;background:#dce2eb}
-    .dot.active{background:var(--accent)}
-    .step{display:none}
-    .step.active{display:block}
-    .section-title{font-size:21px;font-weight:800;margin:18px 2px 12px}
-    .service{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(20,35,60,.025)}
-    .service-head{display:flex;justify-content:space-between;gap:12px}
-    .service-name{font-weight:700}
-    .price{font-weight:800;white-space:nowrap}
-    .desc{font-size:13px;color:var(--muted);margin:4px 0 12px}
-    .controls{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .controls label{font-size:13px;color:var(--muted)}
-    .qty{display:flex;align-items:center;gap:10px}
-    .qty button{width:34px;height:34px;border:1px solid var(--line);background:#f8fafc;border-radius:10px;font-size:20px}
-    .qty output{min-width:18px;text-align:center;font-weight:700}
-    .panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(20,35,60,.025)}
-    .field{margin:12px 0}
-    .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-    .field input,.field textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font:inherit;outline:none}
-    .field textarea{min-height:76px;resize:vertical}
-    .choice{display:flex;gap:9px;flex-wrap:wrap}
-    .choice label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff}
-    .urgent{display:flex;gap:10px;align-items:flex-start;background:#fff8e7;border:1px solid #f5d58b;border-radius:13px;padding:12px;margin:14px 0}
-    .urgent input{margin-top:4px}
-    .urgent small{display:block;color:#765b20}
-    .summary-row{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid var(--line)}
-    .summary-row:last-child{border:0}
-    .total{font-size:22px;font-weight:900}
-    .muted{color:var(--muted);font-size:13px}
-    .actions{display:flex;gap:10px;margin-top:16px}
-    .btn{border:0;border-radius:13px;padding:14px 16px;font-weight:800;font-size:16px;cursor:pointer;flex:1}
-    .primary{background:var(--accent);color:#fff}
-    .secondary{background:#e9eef6;color:#263247}
-    .btn:disabled{opacity:.55}
-    .notice{display:none;padding:12px;border-radius:12px;margin-top:12px;font-size:14px}
-    .notice.show{display:block}
-    .notice.error{background:#feecec;color:#9b1c1c}
-    .notice.ok{background:#e9f8ef;color:#176b37}
-    .footer{text-align:center;color:var(--muted);font-size:12px;margin:18px 0}
-    @media(min-width:600px){.wrap{padding-top:26px}.hero{padding:28px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>Алексей — мастер на час</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#f3f5f8;--card:#fff;--ink:#172033;--muted:#697386;--line:#e6eaf0;--accent:#2563eb;--shadow:0 8px 24px rgba(20,35,60,.07)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:18px 14px 40px}
+.hero{background:linear-gradient(135deg,#111827,#253b61);color:#fff;border-radius:22px;padding:22px;box-shadow:var(--shadow)}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.brand{font-size:25px;font-weight:800}
+.online{font-size:12px;background:#174c39;color:#b9f6d4;border:1px solid #277553;border-radius:20px;padding:6px 10px}
+.sub{color:#d6deeb;margin:7px 0 14px}
+.rating{font-size:14px;color:#fbd46a}
+.benefits{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px}
+.benefits span{font-size:12px;background:rgba(255,255,255,.1);padding:7px 10px;border-radius:30px}
+.progress{display:flex;gap:7px;margin:18px 2px}
+.dot{height:5px;flex:1;border-radius:9px;background:#dce2eb}
+.dot.active{background:var(--accent)}
+.step{display:none}
+.step.active{display:block}
+.section-title{font-size:21px;font-weight:800;margin:18px 2px 12px}
+.service{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(20,35,60,.025)}
+.service-head{display:flex;justify-content:space-between;gap:12px}
+.service-name{font-weight:700}
+.price{font-weight:800;white-space:nowrap}
+.desc{font-size:13px;color:var(--muted);margin:4px 0 12px}
+.controls{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.controls label{font-size:13px;color:var(--muted)}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:34px;height:34px;border:1px solid var(--line);background:#f8fafc;border-radius:10px;font-size:20px}
+.qty output{min-width:18px;text-align:center;font-weight:700}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(20,35,60,.025)}
+.field{margin:12px 0}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.field input,.field textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font:inherit;outline:none}
+.field textarea{min-height:76px;resize:vertical}
+.choice{display:flex;gap:9px;flex-wrap:wrap}
+.choice label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff}
+.urgent{display:flex;gap:10px;align-items:flex-start;background:#fff8e7;border:1px solid #f5d58b;border-radius:13px;padding:12px;margin:14px 0}
+.urgent input{margin-top:4px}
+.urgent small{display:block;color:#765b20}
+.summary-row{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.summary-row:last-child{border:0}
+.total{font-size:22px;font-weight:900}
+.muted{color:var(--muted);font-size:13px}
+.actions{display:flex;gap:10px;margin-top:16px}
+.btn{border:0;border-radius:13px;padding:14px 16px;font-weight:800;font-size:16px;cursor:pointer;flex:1}
+.primary{background:var(--accent);color:#fff}
+.secondary{background:#e9eef6;color:#263247}
+.btn:disabled{opacity:.55}
+.notice{display:none;padding:12px;border-radius:12px;margin-top:12px;font-size:14px}
+.notice.show{display:block}
+.notice.error{background:#feecec;color:#9b1c1c}
+.notice.ok{background:#e9f8ef;color:#176b37}
+.footer{text-align:center;color:var(--muted);font-size:12px;margin:18px 0}
+@media(min-width:600px){.wrap{padding-top:26px}.hero{padding:28px}}
+</style>
 </head>
 <body>
 <div class="wrap">
-  <header class="hero">
-    <div class="top">
-      <div class="brand">Алексей</div>
-      <div class="online">● На связи</div>
-    </div>
-    <div class="sub">Мастер на час · Помощь по дому</div>
-    <div class="rating">★★★★★ <span style="color:#e7edf7">Аккуратно · Надёжно · По договорённости</span></div>
-    <div class="benefits">
-      <span>Выезд по адресу</span>
-      <span>Понятная стоимость</span>
-      <span>Быстрая заявка</span>
-    </div>
-  </header>
 
-  <div class="progress">
-    <div class="dot active" id="dot1"></div>
-    <div class="dot" id="dot2"></div>
-    <div class="dot" id="dot3"></div>
+<header class="hero">
+  <div class="top">
+    <div class="brand">Алексей</div>
+    <div class="online">● На связи</div>
+  </div>
+  <div class="sub">Мастер на час · Помощь по дому</div>
+  <div class="rating">★★★★★ <span style="color:#e7edf7">Аккуратно · Надёжно · По договорённости</span></div>
+  <div class="benefits">
+    <span>Выезд по адресу</span>
+    <span>Понятная стоимость</span>
+    <span>Быстрая заявка</span>
+  </div>
+</header>
+
+<div class="progress">
+  <div class="dot active" id="dot1"></div>
+  <div class="dot" id="dot2"></div>
+  <div class="dot" id="dot3"></div>
+</div>
+
+<section class="step active" id="step1">
+  <div class="section-title">Выберите услуги</div>
+  <div id="services"></div>
+  <div class="panel">
+    <div class="summary-row"><span>Выбрано услуг</span><strong id="count">0</strong></div>
+    <div class="summary-row"><span>Предварительная стоимость</span><strong id="subtotal">0 ₽</strong></div>
+    <div class="muted">Точная стоимость может быть согласована с мастером после уточнения задачи.</div>
+  </div>
+  <div class="actions">
+    <button class="btn primary" onclick="goStep(2)">Продолжить</button>
+  </div>
+</section>
+
+<section class="step" id="step2">
+  <div class="section-title">Контактные данные</div>
+  <div class="panel">
+
+    <div class="field">
+      <label for="name">Ваше имя *</label>
+      <input id="name" autocomplete="name" placeholder="Как к вам обращаться">
+    </div>
+
+    <div class="field">
+      <label for="phone">Телефон для связи (необязательно)</label>
+      <input id="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7 900 000-00-00">
+    </div>
+
+    <div class="field">
+      <label for="address">Адрес *</label>
+      <input id="address" autocomplete="street-address" placeholder="Улица, дом, квартира">
+    </div>
+
+    <div class="field">
+      <label>Когда удобно?</label>
+      <div class="choice">
+        <label><input type="radio" name="time" value="Сегодня" checked> Сегодня</label>
+        <label><input type="radio" name="time" value="Завтра"> Завтра</label>
+        <label><input type="radio" name="time" value="В ближайшие дни"> В ближайшие дни</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="details">Комментарий (необязательно)</label>
+      <textarea id="details" placeholder="Опишите задачу или удобное время"></textarea>
+    </div>
+
+    <label class="urgent">
+      <input type="checkbox" id="urgent" onchange="renderTotals()">
+      <span><strong>Нужен срочный вызов</strong><small>Наценка за срочность +20%</small></span>
+    </label>
   </div>
 
-  <section class="step active" id="step1">
-    <div class="section-title">Выберите услуги</div>
-    <div id="services"></div>
-    <div class="panel">
-      <div class="summary-row"><span>Выбрано услуг</span><strong id="count">0</strong></div>
-      <div class="summary-row"><span>Предварительная стоимость</span><strong id="subtotal">0 ₽</strong></div>
-      <div class="muted">Точная стоимость может быть согласована с мастером после уточнения задачи.</div>
-    </div>
-    <div class="actions">
-      <button class="btn primary" onclick="goStep(2)">Продолжить</button>
-    </div>
-  </section>
+  <div class="actions">
+    <button class="btn secondary" onclick="goStep(1)">Назад</button>
+    <button class="btn primary" onclick="goStep(3)">Посмотреть заявку</button>
+  </div>
+</section>
 
-  <section class="step" id="step2">
-    <div class="section-title">Контактные данные</div>
-    <div class="panel">
-      <div class="field">
-        <label for="name">Ваше имя *</label>
-        <input id="name" autocomplete="name" placeholder="Как к вам обращаться">
-      </div>
-      <div class="field">
-        <label for="address">Адрес *</label>
-        <input id="address" autocomplete="street-address" placeholder="Улица, дом, квартира">
-      </div>
-      <div class="field">
-        <label>Когда удобно?</label>
-        <div class="choice">
-          <label><input type="radio" name="time" value="Сегодня" checked> Сегодня</label>
-          <label><input type="radio" name="time" value="Завтра"> Завтра</label>
-          <label><input type="radio" name="time" value="В ближайшие дни"> В ближайшие дни</label>
-        </div>
-      </div>
-      <div class="field">
-        <label for="details">Комментарий (необязательно)</label>
-        <textarea id="details" placeholder="Опишите задачу или удобное время"></textarea>
-      </div>
-      <label class="urgent">
-        <input type="checkbox" id="urgent" onchange="renderTotals()">
-        <span><strong>Нужен срочный вызов</strong><small>Наценка за срочность +20%</small></span>
-      </label>
-    </div>
-    <div class="actions">
-      <button class="btn secondary" onclick="goStep(1)">Назад</button>
-      <button class="btn primary" onclick="goStep(3)">Посмотреть заявку</button>
-    </div>
-  </section>
+<section class="step" id="step3">
+  <div class="section-title">Проверьте заявку</div>
+  <div class="panel" id="summary"></div>
+  <div class="panel">
+    <div class="summary-row"><span>Стоимость услуг</span><strong id="sumBase">0 ₽</strong></div>
+    <div class="summary-row"><span>Срочный вызов</span><strong id="sumUrgent">0 ₽</strong></div>
+    <div class="summary-row"><span>Итого</span><strong class="total" id="sumTotal">0 ₽</strong></div>
+  </div>
+  <div class="muted">После отправки мастер получит заявку и свяжется с вами для подтверждения деталей и стоимости.</div>
+  <div class="actions">
+    <button class="btn secondary" onclick="goStep(2)">Назад</button>
+    <button class="btn primary" id="sendBtn" onclick="sendOrder()">Отправить заявку</button>
+  </div>
+  <div class="notice" id="notice"></div>
+</section>
 
-  <section class="step" id="step3">
-    <div class="section-title">Проверьте заявку</div>
-    <div class="panel" id="summary"></div>
-    <div class="panel">
-      <div class="summary-row"><span>Стоимость услуг</span><strong id="sumBase">0 ₽</strong></div>
-      <div class="summary-row"><span>Срочный вызов</span><strong id="sumUrgent">0 ₽</strong></div>
-      <div class="summary-row"><span>Итого</span><strong class="total" id="sumTotal">0 ₽</strong></div>
-    </div>
-    <div class="muted">После отправки мастер получит заявку и свяжется с вами для подтверждения деталей и стоимости.</div>
-    <div class="actions">
-      <button class="btn secondary" onclick="goStep(2)">Назад</button>
-      <button class="btn primary" id="sendBtn" onclick="sendOrder()">Отправить заявку</button>
-    </div>
-    <div class="notice" id="notice"></div>
-  </section>
-
-  <div class="footer">Заявка не является подтверждением заказа. Детали согласуются с мастером.</div>
+<div class="footer">Заявка не является подтверждением заказа. Детали согласуются с мастером.</div>
 </div>
 
 <script>
@@ -224,6 +236,7 @@ function goStep(n){
   if(n === 3){
     const name = document.getElementById('name').value.trim();
     const address = document.getElementById('address').value.trim();
+    const phone = document.getElementById('phone').value.trim();
 
     if(!name || !address){
       alert('Заполните имя и адрес.');
@@ -241,6 +254,7 @@ function goStep(n){
 
     document.getElementById('summary').innerHTML = `
       <div class="summary-row"><span>Имя</span><strong>${escapeHtml(name)}</strong></div>
+      ${phone ? `<div class="summary-row"><span>Телефон</span><strong>${escapeHtml(phone)}</strong></div>` : ''}
       <div class="summary-row"><span>Адрес</span><strong>${escapeHtml(address)}</strong></div>
       <div class="summary-row"><span>Время</span><strong>${escapeHtml(time)}</strong></div>
       ${chosen.map(x => `<div class="summary-row"><span>${escapeHtml(x)}</span></div>`).join('')}
@@ -279,12 +293,40 @@ async function sendOrder(){
     .filter(s => quantities[s.id] > 0)
     .map(s => `${s.name}: ${quantities[s.id]} × ${s.price} ₽`);
 
+  // Данные профиля, которые Telegram показывает Mini App
+  const user = tg.initDataUnsafe && tg.initDataUnsafe.user
+    ? tg.initDataUnsafe.user
+    : {};
+
+  const telegramName = [user.first_name, user.last_name]
+    .filter(Boolean).join(' ');
+
+  const telegramUsername = user.username
+    ? '@' + user.username
+    : '';
+
+  const telegramId = user.id ? String(user.id) : '';
+
+  const profileLink = user.username
+    ? 'https://t.me/' + user.username
+    : '';
+
+  // Собираем контактную информацию в комментарий заявки
+  const contactInfo = [
+    document.getElementById('details').value.trim(),
+    telegramName ? 'Имя в Telegram: ' + telegramName : '',
+    telegramUsername ? 'Telegram: ' + telegramUsername : 'У клиента нет публичного username',
+    telegramId ? 'Telegram ID: ' + telegramId : '',
+    profileLink ? 'Профиль: ' + profileLink : ''
+  ].filter(Boolean).join('\n');
+
   const data = {
     initData: tg.initData,
     name: document.getElementById('name').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
     address: document.getElementById('address').value.trim(),
     time: document.querySelector('input[name="time"]:checked').value,
-    details: document.getElementById('details').value.trim(),
+    comment: contactInfo,
     urgent: t.urgent ? 'Да (+20%)' : 'Нет',
     services: chosen.join('\n'),
     total: rub(t.total)
@@ -301,7 +343,7 @@ async function sendOrder(){
       body:JSON.stringify(data)
     });
 
-    showNotice('Запрос передан. Дождитесь подтверждения мастера в Telegram.','ok');
+    showNotice('Заявка передана. Дождитесь подтверждения мастера.','ok');
 
     if(tg.HapticFeedback){
       tg.HapticFeedback.notificationOccurred('success');
