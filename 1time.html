@@ -102,9 +102,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system
 <section class="step" id="step2">
   <div class="section-title">Контактные данные</div>
   <div class="panel">
-
     <div class="field">
-      <label for="name">Ваше имя *</label>
+      <label for="name">Ваше имя</label>
       <input id="name" autocomplete="name" placeholder="Как к вам обращаться">
     </div>
 
@@ -180,7 +179,21 @@ const services = [
 const quantities = {};
 services.forEach(s => quantities[s.id] = 0);
 
-const rub = n => Math.round(n).toLocaleString('ru-RU') + ' ₽';
+function telegramUser(){
+  const tg = window.Telegram && window.Telegram.WebApp;
+  return tg && tg.initDataUnsafe && tg.initDataUnsafe.user
+    ? tg.initDataUnsafe.user
+    : {};
+}
+
+function telegramDisplayName(){
+  const user = telegramUser();
+  return [user.first_name,user.last_name].filter(Boolean).join(' ').trim();
+}
+
+function rub(n){
+  return Math.round(n).toLocaleString('ru-RU') + ' ₽';
+}
 
 function renderServices(){
   document.getElementById('services').innerHTML = services.map(s => `
@@ -203,13 +216,13 @@ function renderServices(){
 }
 
 function changeQty(id,delta){
-  quantities[id] = Math.max(0, quantities[id] + delta);
+  quantities[id] = Math.max(0,quantities[id] + delta);
   document.getElementById('qty-' + id).textContent = quantities[id];
   renderTotals();
 }
 
 function baseTotal(){
-  return services.reduce((sum,s) => sum + s.price * quantities[s.id], 0);
+  return services.reduce((sum,s) => sum + s.price * quantities[s.id],0);
 }
 
 function renderTotals(){
@@ -218,7 +231,7 @@ function renderTotals(){
   const total = base ? (urgent ? Math.round(base * 1.2) + (base * 1.2 < 1500 ? 500 : 0) : base) : 0;
 
   document.getElementById('count').textContent =
-    Object.values(quantities).reduce((a,b) => a + b, 0);
+    Object.values(quantities).reduce((a,b) => a + b,0);
   document.getElementById('subtotal').textContent = rub(base);
   document.getElementById('sumBase').textContent = rub(base);
   document.getElementById('sumUrgent').textContent = rub(total - base);
@@ -234,12 +247,19 @@ function goStep(n){
   }
 
   if(n === 3){
-    const name = document.getElementById('name').value.trim();
+    const typedName = document.getElementById('name').value.trim();
+    const name = typedName || telegramDisplayName();
     const address = document.getElementById('address').value.trim();
     const phone = document.getElementById('phone').value.trim();
 
-    if(!name || !address){
-      alert('Заполните имя и адрес.');
+    if(!name){
+      alert('Не удалось получить имя из Telegram. Пожалуйста, введите имя.');
+      goStep(2);
+      return;
+    }
+
+    if(!address){
+      alert('Заполните адрес.');
       goStep(2);
       return;
     }
@@ -265,17 +285,13 @@ function goStep(n){
 
   document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
   document.getElementById('step' + n).classList.add('active');
-  [1,2,3].forEach(i => document.getElementById('dot' + i).classList.toggle('active', i <= n));
+  [1,2,3].forEach(i => document.getElementById('dot' + i).classList.toggle('active',i <= n));
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function escapeHtml(value){
-  return String(value).replace(/[&<>"']/g, c => ({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#39;'
+  return String(value).replace(/[&<>"']/g,c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   }[c]));
 }
 
@@ -293,40 +309,28 @@ async function sendOrder(){
     .filter(s => quantities[s.id] > 0)
     .map(s => `${s.name}: ${quantities[s.id]} × ${s.price} ₽`);
 
-  // Данные профиля, которые Telegram показывает Mini App
-  const user = tg.initDataUnsafe && tg.initDataUnsafe.user
-    ? tg.initDataUnsafe.user
-    : {};
+  const user = telegramUser();
+  const telegramName = telegramDisplayName();
+  const telegramUsername = user.username ? '@' + user.username : '';
 
-  const telegramName = [user.first_name, user.last_name]
-    .filter(Boolean).join(' ');
+  const enteredName = document.getElementById('name').value.trim();
+  const finalName = enteredName || telegramName;
 
-  const telegramUsername = user.username
-    ? '@' + user.username
-    : '';
+  const details = document.getElementById('details').value.trim();
 
-  const telegramId = user.id ? String(user.id) : '';
-
-  const profileLink = user.username
-    ? 'https://t.me/' + user.username
-    : '';
-
-  // Собираем контактную информацию в комментарий заявки
-  const contactInfo = [
-    document.getElementById('details').value.trim(),
-    telegramName ? 'Имя в Telegram: ' + telegramName : '',
-    telegramUsername ? 'Telegram: ' + telegramUsername : 'У клиента нет публичного username',
-    telegramId ? 'Telegram ID: ' + telegramId : '',
-    profileLink ? 'Профиль: ' + profileLink : ''
-  ].filter(Boolean).join('\n');
+  // Оставляем только комментарий клиента и username Telegram.
+  // Telegram ID и ссылку на профиль не отправляем.
+  const commentParts = [];
+  if(details) commentParts.push(details);
+  if(telegramUsername) commentParts.push('Telegram: ' + telegramUsername);
 
   const data = {
     initData: tg.initData,
-    name: document.getElementById('name').value.trim(),
+    name: finalName || 'Клиент Telegram',
     phone: document.getElementById('phone').value.trim(),
     address: document.getElementById('address').value.trim(),
     time: document.querySelector('input[name="time"]:checked').value,
-    comment: contactInfo,
+    comment: commentParts.join('\n'),
     urgent: t.urgent ? 'Да (+20%)' : 'Нет',
     services: chosen.join('\n'),
     total: rub(t.total)
@@ -361,6 +365,14 @@ function showNotice(message,type){
   el.textContent = message;
   el.className = 'notice show ' + type;
 }
+
+// Автоматически подставляем имя из Telegram в поле имени.
+document.addEventListener('DOMContentLoaded',() => {
+  const nameField = document.getElementById('name');
+  if(nameField && !nameField.value.trim()){
+    nameField.value = telegramDisplayName();
+  }
+});
 
 renderServices();
 renderTotals();
