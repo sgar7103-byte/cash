@@ -1,154 +1,256 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Мастер на час</title>
-    <!-- Подключаем SDK Telegram -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        background-color: var(--tg-theme-bg-color, #fff);
-        color: var(--tg-theme-text-color, #000);
-        padding: 16px;
-        margin: 0;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мастер на час</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--tg-theme-bg-color, #fff);
+      color: var(--tg-theme-text-color, #111);
+      margin: 0; padding: 16px;
+      padding-bottom: 110px;
+    }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    .hint { color: var(--tg-theme-hint-color, #888); font-size: 13px; margin-bottom: 16px; }
+    .section-title { font-weight: 600; margin: 18px 0 8px; font-size: 15px; }
+    .service {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--tg-theme-secondary-bg-color, #f2f2f2);
+      border-radius: 12px; padding: 12px; margin-bottom: 8px;
+    }
+    .service .info { flex: 1; }
+    .service .name { font-weight: 500; font-size: 15px; }
+    .service .price { color: var(--tg-theme-hint-color, #888); font-size: 13px; margin-top: 2px; }
+    .qty { display: flex; align-items: center; gap: 10px; }
+    .qty button {
+      width: 32px; height: 32px; border-radius: 8px; border: none;
+      background: var(--tg-theme-button-color, #2481cc);
+      color: #fff; font-size: 18px; cursor: pointer; padding: 0;
+    }
+    .qty span { min-width: 20px; text-align: center; font-weight: 600; }
+    .row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .chip {
+      flex: 1; padding: 10px; border-radius: 10px; text-align: center;
+      background: var(--tg-theme-secondary-bg-color, #f2f2f2);
+      border: 2px solid transparent; font-size: 14px; cursor: pointer;
+    }
+    .chip.active {
+      border-color: var(--tg-theme-button-color, #2481cc);
+      font-weight: 600;
+    }
+    input, textarea, select {
+      width: 100%; padding: 12px; margin-bottom: 10px;
+      border: 1px solid var(--tg-theme-hint-color, #ccc);
+      border-radius: 10px; font-size: 15px;
+      background: var(--tg-theme-secondary-bg-color, #f2f2f2);
+      color: var(--tg-theme-text-color, #111);
+    }
+    .urgent {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--tg-theme-secondary-bg-color, #f2f2f2);
+      border-radius: 10px; padding: 12px; margin: 12px 0; font-size: 14px;
+    }
+    .summary {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--tg-theme-bg-color, #fff);
+      padding: 12px 16px 16px;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+    }
+    .summary .line { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px; color: var(--tg-theme-hint-color, #888); }
+    .summary .line.total { font-size: 17px; font-weight: 700; color: var(--tg-theme-text-color, #111); }
+    #send-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: var(--tg-theme-button-color, #2481cc);
+      color: var(--tg-theme-button-text-color, #fff);
+      border: none; border-radius: 12px;
+      font-size: 16px; font-weight: 600; cursor: pointer;
+    }
+    #send-btn:disabled { opacity: 0.5; }
+    #status { text-align: center; font-size: 14px; margin-top: 8px; min-height: 18px; }
+    .success { color: #2ecc71; }
+    .error { color: #e74c3c; }
+  </style>
+</head>
+<body>
+  <h1>Мастер на час</h1>
+  <div class="hint">Выберите услуги — стоимость посчитается сама</div>
+
+  <div class="section-title">Услуги</div>
+  <div id="services-list"></div>
+
+  <div class="section-title">Когда приехать?</div>
+  <div class="row" id="days"></div>
+  <div class="row" id="dayparts"></div>
+
+  <label class="urgent">
+    <input type="checkbox" id="urgent" style="width:auto">
+    <span>Срочный выезд (+50% к стоимости)</span>
+  </label>
+
+  <div class="section-title">Ваши данные</div>
+  <input type="text" id="name" placeholder="Ваше имя">
+  <input type="tel" id="phone" placeholder="Телефон: +7 999 000-00-00">
+  <input type="text" id="address" placeholder="Адрес: город, улица, дом, квартира">
+  <textarea id="comment" rows="2" placeholder="Комментарий: этаж, код домофона..."></textarea>
+
+  <div class="summary">
+    <div class="line"><span>Без наценки</span><span id="subtotal">0 ₽</span></div>
+    <div class="line total"><span>Итого</span><span id="total">0 ₽</span></div>
+    <button type="button" id="send-btn">Отправить заявку</button>
+    <div id="status"></div>
+  </div>
+
+<script>
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoOYxRmzuUwEHptIT8802Ffqqinpnl3cjZEZagmXf8g-Wnq9bfa3pN3d0L26mI7uVx/exec';
+
+  const tg = window.Telegram.WebApp;
+  tg.ready();
+  tg.expand();
+
+  // ── Услуги и цены (правьте под себя) ──
+  const SERVICES = [
+    { id: 'sbor',   name: 'Сборка мебели',          price: 900 },
+    { id: 'polka',  name: 'Повесить полку/картину', price: 500 },
+    { id: 'santeh', name: 'Сантехника (кран, смыв)', price: 700 },
+    { id: 'elek',   name: 'Электрика (розетка, лампа)', price: 600 },
+    { id: 'zamok',  name: 'Замена замка',           price: 800 },
+    { id: 'dver',   name: 'Регулировка дверей',     price: 500 }
+  ];
+  const DAYS = ['Сегодня', 'Завтра', 'В выходные'];
+  const DAYPARTS = ['Утро', 'День', 'Вечер'];
+
+  const counts = {};
+  SERVICES.forEach(s => counts[s.id] = 0);
+  let day = DAYS[0], daypart = DAYPARTS[1];
+
+  const fmt = n => n.toLocaleString('ru-RU') + ' ₽';
+
+  function renderServices() {
+    document.getElementById('services-list').innerHTML = SERVICES.map(s => `
+      <div class="service">
+        <div class="info">
+          <div class="name">${s.name}</div>
+          <div class="price">${fmt(s.price)}</div>
+        </div>
+        <div class="qty">
+          <button data-id="${s.id}" data-d="-1">−</button>
+          <span id="q-${s.id}">${counts[s.id]}</span>
+          <button data-id="${s.id}" data-d="1">+</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderChips(id, arr, current) {
+    document.getElementById(id).innerHTML = arr.map(v =>
+      `<div class="chip ${v === current ? 'active' : ''}" data-val="${v}">${v}</div>`
+    ).join('');
+  }
+
+  function recalc() {
+    const subtotal = SERVICES.reduce((sum, s) => sum + s.price * counts[s.id], 0);
+    const urgent = document.getElementById('urgent').checked;
+    const total = urgent ? Math.round(subtotal * 1.5) : subtotal;
+    document.getElementById('subtotal').textContent = fmt(subtotal);
+    document.getElementById('total').textContent = fmt(total);
+    return { subtotal, total, urgent };
+  }
+
+  document.getElementById('services-list').addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    counts[id] = Math.max(0, counts[id] + Number(btn.dataset.d));
+    document.getElementById('q-' + id).textContent = counts[id];
+    recalc();
+  });
+  document.getElementById('urgent').addEventListener('change', recalc);
+
+  document.getElementById('days').addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    day = chip.dataset.val;
+    renderChips('days', DAYS, day);
+  });
+  document.getElementById('dayparts').addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    daypart = chip.dataset.val;
+    renderChips('dayparts', DAYPARTS, daypart);
+  });
+
+  // ── Отправка заявки ──
+  document.getElementById('send-btn').addEventListener('click', async () => {
+    const status = document.getElementById('status');
+    const btn = document.getElementById('send-btn');
+
+    const picked = SERVICES.filter(s => counts[s.id] > 0);
+    if (picked.length === 0) {
+      status.className = 'error';
+      status.textContent = 'Выберите хотя бы одну услугу';
+      return;
+    }
+    if (!document.getElementById('name').value.trim() ||
+        !document.getElementById('phone').value.trim() ||
+        !document.getElementById('address').value.trim()) {
+      status.className = 'error';
+      status.textContent = 'Заполните имя, телефон и адрес';
+      return;
+    }
+
+    const { subtotal, total, urgent } = recalc();
+
+    // Собираем заявку в JSON — ровно в том виде, какой ждёт Apps Script
+    const payload = {
+      initData: tg.initData || '',
+      name: document.getElementById('name').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      address: document.getElementById('address').value.trim(),
+      time: day,
+      daypart: daypart,
+      services: picked.map(s => s.name + ' × ' + counts[s.id]).join(', '),
+      urgent: urgent ? 'Да' : 'Нет',
+      subtotal: fmt(subtotal),
+      total: fmt(total),
+      comment: document.getElementById('comment').value.trim()
+    };
+
+    status.className = '';
+    status.textContent = 'Отправляем...';
+    btn.disabled = true;
+
+    try {
+      // Без заголовков Content-Type — так Apps Script не режет запрос CORS'ом
+      const response = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      const result = await response.text();
+
+      if (result === 'OK') {
+        status.className = 'success';
+        status.textContent = '✅ Заявка отправлена! Скоро свяжусь с вами.';
+        tg.HapticFeedback?.notificationOccurred('success');
+      } else {
+        status.className = 'error';
+        status.textContent = '❌ Ошибка: ' + result;
       }
-      h1 { margin-top: 0; }
-      .form-group { margin-bottom: 12px; }
-      label { display: block; margin-bottom: 4px; font-weight: 500; }
-      input, textarea, select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid var(--tg-theme-hint-color, #ccc);
-        border-radius: 8px;
-        box-sizing: border-box;
-        background-color: var(--tg-theme-secondary-bg-color, #f5f5f5);
-        color: var(--tg-theme-text-color, #000);
-      }
-      button {
-        width: 100%;
-        padding: 14px;
-        background-color: var(--tg-theme-button-color, #2481cc);
-        color: var(--tg-theme-button-text-color, #fff);
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-      }
-      button:active { opacity: 0.8; }
-      .status { margin-top: 15px; text-align: center; font-size: 14px; }
-      .success { color: var(--tg-theme-hint-color, #2ecc71); }
-      .error { color: #e74c3c; }
-    </style>
-  </head>
-  <body>
-    <h1>Заявка на выезд</h1>
-    
-    <!-- ВАЖНО: у формы должен быть id="order-form" -->
-    <form id="order-form">
-      <div class="form-group">
-        <label for="name">Ваше имя</label>
-        <input type="text" id="name" name="name" required placeholder="Иван Иванов" />
-      </div>
+    } catch (err) {
+      status.className = 'error';
+      status.textContent = '❌ Ошибка сети. Проверьте подключение.';
+    }
+    btn.disabled = false;
+  });
 
-      <div class="form-group">
-        <label for="phone">Телефон</label>
-        <input type="tel" id="phone" name="phone" required placeholder="+7 (999) 000-00-00" />
-      </div>
-
-      <div class="form-group">
-        <label for="address">Адрес</label>
-        <input type="text" id="address" name="address" required placeholder="Город, улица, дом, кв." />
-      </div>
-
-      <div class="form-group">
-        <label for="time">Когда удобно?</label>
-        <select id="time" name="time">
-          <option value="Сегодня">Сегодня</option>
-          <option value="Завтра">Завтра</option>
-          <option value="В выходные">В выходные</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="services">Что нужно сделать?</label>
-        <textarea id="services" name="services" rows="3" required placeholder="Например: повесить полку, починить кран..."></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="comment">Комментарий (опционально)</label>
-        <textarea id="comment" name="comment" rows="2" placeholder="Этаж, код домофона и т.д."></textarea>
-      </div>
-
-      <!-- ВАЖНО: у кнопки должен быть id="send-btn" -->
-      <button type="button" id="send-btn">Отправить заявку</button>
-    </form>
-
-    <div id="status" class="status"></div>
-
-    <script>
-      // 1. Инициализация Telegram WebApp
-      const tg = window.Telegram.WebApp;
-      tg.ready();
-
-      // 2. Получаем initData (подпись) ТОЛЬКО после готовности
-      const initData = tg.initData;
-
-      // 3. Находим элементы
-      const btn = document.getElementById('send-btn');
-      const form = document.getElementById('order-form');
-      const statusDiv = document.getElementById('status');
-
-      if (btn && form) {
-        btn.addEventListener('click', async (e) => {
-          e.preventDefault(); // Отменяем стандартную отправку формы
-
-          // Проверка: если initData нет, значит, мы не в Telegram или ошибка
-          if (!initData) {
-            statusDiv.className = 'status error';
-            statusDiv.textContent = 'Ошибка: Не удалось получить данные Telegram. Обновите мини-апп.';
-            return;
-          }
-
-          const formData = new FormData(form);
-          
-          // САМОЕ ВАЖНОЕ: Добавляем подпись от Telegram в форму
-          formData.append('initData', initData);
-
-          // Здесь вставьте ВАШ URL из развёртывания (заканчивается на /exec)
-          // Пример: https://script.google.com/macros/s/AKfycbx.../exec
-          const scriptUrl = 'https://script.google.com/macros/s/AKfycbwoOYxRmzuUwEHptIT8802Ffqqinpnl3cjZEZagmXf8g-Wnq9bfa3pN3d0L26mI7uVx/exec'; 
-
-          statusDiv.className = 'status';
-          statusDiv.textContent = 'Отправка...';
-
-          try {
-            const response = await fetch(scriptUrl, {
-              method: 'POST',
-              body: formData
-            });
-
-            const result = await response.text();
-
-            if (result === 'OK') {
-              statusDiv.className = 'status success';
-              statusDiv.textContent = '✅ Заявка успешно отправлена!';
-              
-              // Можно закрыть приложение после успеха
-              // tg.close(); 
-            } else {
-              statusDiv.className = 'status error';
-              statusDiv.textContent = '❌ Ошибка: ' + result;
-            }
-          } catch (error) {
-            console.error('Fetch error:', error);
-            statusDiv.className = 'status error';
-            statusDiv.textContent = '❌ Ошибка сети. Проверьте интернет.';
-          }
-        });
-      }
-    </script>
-  </body>
+  // ── Стартовый рендер ──
+  renderServices();
+  renderChips('days', DAYS, day);
+  renderChips('dayparts', DAYPARTS, daypart);
+  recalc();
+</script>
+</body>
 </html>
