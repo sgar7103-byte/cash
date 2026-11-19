@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ru">
 <head>
@@ -21,25 +20,37 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system
 .benefits{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px}
 .benefits span{font-size:12px;background:rgba(255,255,255,.1);padding:7px 10px;border-radius:30px}
 .progress{display:flex;gap:7px;margin:18px 2px}
-.dot{height:5px;flex:1;border-radius:9px;background:#dce2eb}
+.dot{height:5px;flex:1;border-radius:9px;background:#dce2eb;transition:background .2s}
 .dot.active{background:var(--accent)}
+.dot.done{background:#9db8e8;cursor:pointer}
 .step{display:none}
 .step.active{display:block}
 .section-title{font-size:21px;font-weight:800;margin:18px 2px 12px}
-.service{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(20,35,60,.025)}
-.service-head{display:flex;justify-content:space-between;gap:12px}
+.service{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(20,35,60,.025);overflow:hidden}
+.service-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px;cursor:pointer;user-select:none}
 .service-name{font-weight:700}
-.price{font-weight:800;white-space:nowrap}
-.desc{font-size:13px;color:var(--muted);margin:4px 0 12px}
-.controls{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.controls label{font-size:13px;color:var(--muted)}
-.qty{display:flex;align-items:center;gap:10px}
-.qty button{width:34px;height:34px;border:1px solid var(--line);background:#f8fafc;border-radius:10px;font-size:20px}
+.service-name small{display:block;font-weight:400;color:var(--muted);font-size:12px;margin-top:2px}
+.chev{flex:0 0 auto;width:26px;height:26px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:transform .2s}
+.service.open .chev{transform:rotate(180deg)}
+.variants{display:none;border-top:1px solid var(--line)}
+.service.open .variants{display:block}
+.variant{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line)}
+.variant:last-child{border-bottom:0}
+.variant-info{flex:1;min-width:0}
+.variant-name{font-size:14.5px}
+.variant-price{font-size:12.5px;color:var(--muted);margin-top:1px}
+.variant-picked{font-size:11px;color:var(--accent);background:#eaf1ff;border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:700}
+.qty{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.qty button{width:32px;height:32px;border:1px solid var(--line);background:#f8fafc;border-radius:10px;font-size:19px;cursor:pointer}
+.qty button:active{background:#eef2f8}
 .qty output{min-width:18px;text-align:center;font-weight:700}
 .panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(20,35,60,.025)}
 .field{margin:12px 0}
 .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-.field input,.field textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font:inherit;outline:none}
+.field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font:inherit;outline:none}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field.error input,.field.error textarea,.field.error .choice{border-color:#d84a4a;box-shadow:0 0 0 3px rgba(216,74,74,.12)}
+.field .choice{border:1px solid transparent;border-radius:11px}
 .field textarea{min-height:76px;resize:vertical}
 .choice{display:flex;gap:9px;flex-wrap:wrap}
 .choice label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff}
@@ -48,6 +59,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system
 .urgent small{display:block;color:#765b20}
 .summary-row{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
 .summary-row:last-child{border:0}
+.summary-row .sum{white-space:nowrap;font-weight:700;text-align:right}
+.summary-row .head{color:var(--muted);font-size:13px}
 .total{font-size:22px;font-weight:900}
 .muted{color:var(--muted);font-size:13px}
 .actions{display:flex;gap:10px;margin-top:16px}
@@ -65,7 +78,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system
 </head>
 <body>
 <div class="wrap">
-
 <header class="hero">
   <div class="top">
     <div class="brand">Алексей</div>
@@ -79,308 +91,447 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system
     <span>Быстрая заявка</span>
   </div>
 </header>
-
 <div class="progress">
-  <div class="dot active" id="dot1"></div>
-  <div class="dot" id="dot2"></div>
-  <div class="dot" id="dot3"></div>
+  <div class="dot active" id="dot1" onclick="goStep(1)"></div>
+  <div class="dot" id="dot2" onclick="goStep(2)"></div>
+  <div class="dot" id="dot3" onclick="goStep(3)"></div>
 </div>
-
 <section class="step active" id="step1">
   <div class="section-title">Выберите услуги</div>
   <div id="services"></div>
   <div class="panel">
-    <div class="summary-row"><span>Выбрано услуг</span><strong id="count">0</strong></div>
+    <div class="summary-row"><span>Выбрано позиций</span><strong id="count">0</strong></div>
     <div class="summary-row"><span>Предварительная стоимость</span><strong id="subtotal">0 ₽</strong></div>
-    <div class="muted">Точная стоимость может быть согласована с мастером после уточнения задачи.</div>
+    <div class="muted" id="otherHint" style="display:none">Выбрана «Другая работа» — её стоимость мастер согласует отдельно.</div>
+    <div class="muted">Цены указаны «от» и уточняются до начала работы. Итог фиксируется с мастером.</div>
   </div>
+  <div class="notice" id="notice1"></div>
   <div class="actions">
     <button class="btn primary" onclick="goStep(2)">Продолжить</button>
   </div>
 </section>
-
 <section class="step" id="step2">
   <div class="section-title">Контактные данные</div>
   <div class="panel">
-    <div class="field">
+    <div class="field" id="f-name">
       <label for="name">Ваше имя</label>
       <input id="name" autocomplete="name" placeholder="Как к вам обращаться">
     </div>
-
-    <div class="field">
-      <label for="phone">Телефон для связи (необязательно)</label>
+    <div class="field" id="f-phone">
+      <label for="phone">Телефон для связи</label>
       <input id="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7 900 000-00-00">
     </div>
-
-    <div class="field">
-      <label for="address">Адрес *</label>
+    <div class="field" id="f-address">
+      <label for="address">Адрес</label>
       <input id="address" autocomplete="street-address" placeholder="Улица, дом, квартира">
     </div>
-
-    <div class="field">
+    <div class="field" id="f-time">
       <label>Когда удобно?</label>
       <div class="choice">
-        <label><input type="radio" name="time" value="Сегодня" checked> Сегодня</label>
+        <label><input type="radio" name="time" value="Сегодня"> Сегодня</label>
         <label><input type="radio" name="time" value="Завтра"> Завтра</label>
         <label><input type="radio" name="time" value="В ближайшие дни"> В ближайшие дни</label>
       </div>
     </div>
-
-    <div class="field">
-      <label for="details">Комментарий (необязательно)</label>
-      <textarea id="details" placeholder="Опишите задачу или удобное время"></textarea>
+    <div class="field" id="f-slot">
+      <label for="slot">Предпочтительное время (необязательно)</label>
+      <select id="slot">
+        <option value="">Не важно</option>
+        <option value="Утро (9:00–12:00)">Утро (9:00–12:00)</option>
+        <option value="День (12:00–17:00)">День (12:00–17:00)</option>
+        <option value="Вечер (17:00–21:00)">Вечер (17:00–21:00)</option>
+      </select>
     </div>
-
+    <div class="field" id="f-details">
+      <label for="details">Комментарий</label>
+      <textarea id="details" placeholder="Опишите задачу, нюансы или удобное время"></textarea>
+    </div>
     <label class="urgent">
       <input type="checkbox" id="urgent" onchange="renderTotals()">
-      <span><strong>Нужен срочный вызов</strong><small>Наценка за срочность +20%</small></span>
+      <span><strong>Нужен срочный вызов</strong><small>Наценка за срочность +20%, минимальный заказ — 2 000 ₽</small></span>
     </label>
   </div>
-
+  <div class="notice" id="notice2"></div>
   <div class="actions">
     <button class="btn secondary" onclick="goStep(1)">Назад</button>
     <button class="btn primary" onclick="goStep(3)">Посмотреть заявку</button>
   </div>
 </section>
-
 <section class="step" id="step3">
   <div class="section-title">Проверьте заявку</div>
   <div class="panel" id="summary"></div>
   <div class="panel">
-    <div class="summary-row"><span>Стоимость услуг</span><strong id="sumBase">0 ₽</strong></div>
-    <div class="summary-row"><span>Срочный вызов</span><strong id="sumUrgent">0 ₽</strong></div>
+    <div class="summary-row"><span>Стоимость услуг</span><strong class="sum" id="sumBase">0 ₽</strong></div>
+    <div class="summary-row" id="rowOther" style="display:none"><span>Другая работа</span><strong class="sum">по договорённости</strong></div>
+    <div class="summary-row" id="rowUrgent" style="display:none"><span>Срочный вызов (+20%)</span><strong class="sum" id="sumUrgent">0 ₽</strong></div>
     <div class="summary-row"><span>Итого</span><strong class="total" id="sumTotal">0 ₽</strong></div>
   </div>
-  <div class="muted">После отправки мастер получит заявку и свяжется с вами для подтверждения деталей и стоимости.</div>
+  <div class="muted">После отправки мастер получит заявку и свяжется с вами для подтверждения деталей и финальной стоимости.</div>
   <div class="actions">
     <button class="btn secondary" onclick="goStep(2)">Назад</button>
     <button class="btn primary" id="sendBtn" onclick="sendOrder()">Отправить заявку</button>
   </div>
-  <div class="notice" id="notice"></div>
+  <div class="notice" id="notice3"></div>
 </section>
-
 <div class="footer">Заявка не является подтверждением заказа. Детали согласуются с мастером.</div>
 </div>
-
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoOYxRmzuUwEHptIT8802Ffqqinpnl3cjZEZagmXf8g-Wnq9bfa3pN3d0L26mI7uVx/exec';
-
-const services = [
-  {id:'hour',name:'Мастер на час',price:1500,desc:'Мелкий бытовой ремонт и помощь по дому',unit:'час'},
-  {id:'furniture',name:'Сборка мебели',price:1200,desc:'Сборка и установка мебели',unit:'шт.'},
-  {id:'shelf',name:'Установка полки',price:700,desc:'Крепление полок и небольших конструкций',unit:'шт.'},
-  {id:'curtain',name:'Карниз / шторы',price:1000,desc:'Установка карнизов и креплений',unit:'шт.'},
-  {id:'tv',name:'Установка телевизора',price:1800,desc:'Крепление ТВ на стену (кронштейн отдельно)',unit:'шт.'},
-  {id:'kitchen',name:'Работы на кухне',price:1500,desc:'Мелкий монтаж и регулировка кухонной мебели',unit:'работа'},
-  {id:'plumbing',name:'Сантехнические мелочи',price:1200,desc:'Замена/установка простых элементов',unit:'работа'},
-  {id:'other',name:'Другая работа',price:1000,desc:'Опишите задачу в комментарии — уточним стоимость',unit:'работа'}
+/* ============ КАТАЛОГ УСЛУГ ============
+   Категория → конкретные работы со своей ценой.
+   price: null — цена по договорённости (в итог не входит). */
+const CATEGORIES = [
+  {
+    id:'hour', name:'Мастер на час', hint:'Почасовая помощь по дому',
+    items:[
+      {id:'hour1', name:'Работа мастера', price:1500, unit:'час'}
+    ]
+  },
+  {
+    id:'furniture', name:'Сборка мебели', hint:'Столы, шкафы, кровати и др.',
+    items:[
+      {id:'chair',    name:'Стул / табурет',            price:500,  unit:'шт.'},
+      {id:'table',    name:'Стол обеденный / письменный', price:1200, unit:'шт.'},
+      {id:'dresser',  name:'Комод / тумба',             price:1200, unit:'шт.'},
+      {id:'bed',      name:'Кровать',                   price:1800, unit:'шт.'},
+      {id:'wardrobe', name:'Шкаф (корпусный / купе)',   price:2500, unit:'шт.'},
+      {id:'kitchen',  name:'Кухонный гарнитур',         price:800,  unit:'модуль'}
+    ]
+  },
+  {
+    id:'plumbing', name:'Сантехника', hint:'Мелкий монтаж и замена',
+    items:[
+      {id:'faucet', name:'Замена смесителя',          price:900,  unit:'шт.'},
+      {id:'sink',   name:'Замена сифона / слив',      price:700,  unit:'шт.'},
+      {id:'toilet', name:'Установка унитаза',         price:1800, unit:'шт.'},
+      {id:'shower', name:'Душевая лейка / шланг',     price:600,  unit:'шт.'},
+      {id:'drain',  name:'Прочистка слива',           price:1000, unit:'раз'}
+    ]
+  },
+  {
+    id:'electric', name:'Электрика', hint:'Розетки, светильники',
+    items:[
+      {id:'socket', name:'Розетка / выключатель',  price:700,  unit:'шт.'},
+      {id:'lamp',   name:'Люстра / светильник',    price:1000, unit:'шт.'},
+      {id:'holder', name:'Замена патрона',         price:600,  unit:'шт.'}
+    ]
+  },
+  {
+    id:'wall', name:'Полки, карнизы, ТВ', hint:'Настенный монтаж',
+    items:[
+      {id:'shelf',   name:'Полка',                  price:700,  unit:'шт.'},
+      {id:'cornice', name:'Карниз',                 price:900,  unit:'шт.'},
+      {id:'mirror',  name:'Зеркало / картина',      price:600,  unit:'шт.'},
+      {id:'tv',      name:'ТВ на кронштейн',        price:1800, unit:'шт.'}
+    ]
+  },
+  {
+    id:'appliances', name:'Бытовая техника', hint:'Подключение',
+    items:[
+      {id:'washer',     name:'Стиральная машина',        price:1200, unit:'шт.'},
+      {id:'dishwasher', name:'Посудомоечная машина',     price:1300, unit:'шт.'},
+      {id:'oven',       name:'Духовой шкаф / варочная',  price:1500, unit:'шт.'}
+    ]
+  },
+  {
+    id:'doors', name:'Двери и замки', hint:'Замена, врезка, регулировка',
+    items:[
+      {id:'lock',      name:'Замена замка',     price:1000, unit:'шт.'},
+      {id:'lockinstall', name:'Врезка замка',   price:1800, unit:'шт.'},
+      {id:'dooradj',   name:'Регулировка двери', price:800, unit:'шт.'}
+    ]
+  },
+  {
+    id:'other', name:'Другая работа', hint:'Опишите задачу — уточним стоимость',
+    items:[
+      {id:'other1', name:'Своя задача', price:null, unit:''}
+    ]
+  }
 ];
-
+/* Плоский индекс всех работ для быстрого доступа */
+const ITEMS = {};
+CATEGORIES.forEach(c => c.items.forEach(i => {
+  i.category = c.id;
+  ITEMS[i.id] = i;
+}));
 const quantities = {};
-services.forEach(s => quantities[s.id] = 0);
-
+Object.keys(ITEMS).forEach(id => quantities[id] = 0);
+const URGENT_RATE = 0.2;
+const MIN_URGENT_TOTAL = 2000;
+let currentStep = 1;
+let sending = false;
+/* ============ УТИЛИТЫ ============ */
 function telegramUser(){
   const tg = window.Telegram && window.Telegram.WebApp;
-  return tg && tg.initDataUnsafe && tg.initDataUnsafe.user
-    ? tg.initDataUnsafe.user
-    : {};
+  return tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : {};
 }
-
 function telegramDisplayName(){
-  const user = telegramUser();
-  return [user.first_name,user.last_name].filter(Boolean).join(' ').trim();
+  const u = telegramUser();
+  return [u.first_name, u.last_name].filter(Boolean).join(' ').trim();
 }
-
 function rub(n){
   return Math.round(n).toLocaleString('ru-RU') + ' ₽';
 }
-
-function renderServices(){
-  document.getElementById('services').innerHTML = services.map(s => `
-    <article class="service">
-      <div class="service-head">
-        <div class="service-name">${s.name}</div>
-        <div class="price">от ${rub(s.price)}</div>
-      </div>
-      <div class="desc">${s.desc}</div>
-      <div class="controls">
-        <label>Количество (${s.unit})</label>
-        <div class="qty">
-          <button type="button" aria-label="Уменьшить" onclick="changeQty('${s.id}',-1)">−</button>
-          <output id="qty-${s.id}">0</output>
-          <button type="button" aria-label="Увеличить" onclick="changeQty('${s.id}',1)">+</button>
-        </div>
-      </div>
-    </article>
-  `).join('');
+function escapeHtml(v){
+  return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-
+/* ============ ШАГ 1: КАТАЛОГ ============ */
+function renderServices(){
+  document.getElementById('services').innerHTML = CATEGORIES.map(c => {
+    const variants = c.items.map(i => {
+      if(i.price === null){
+        return `
+          <div class="variant">
+            <div class="variant-info">
+              <div class="variant-name">${i.name} <span class="variant-picked" id="pick-${i.id}" style="display:none">выбрано</span></div>
+              <div class="variant-price">цена по договорённости — опишите задачу в комментарии</div>
+            </div>
+            <div class="qty">
+              <button type="button" aria-label="Убрать" onclick="changeQty('${i.id}',-1)">−</button>
+              <output id="qty-${i.id}">0</output>
+              <button type="button" aria-label="Добавить" onclick="changeQty('${i.id}',1)">+</button>
+            </div>
+          </div>`;
+      }
+      return `
+        <div class="variant">
+          <div class="variant-info">
+            <div class="variant-name">${i.name} <span class="variant-picked" id="pick-${i.id}" style="display:none">× 0</span></div>
+            <div class="variant-price">от ${rub(i.price)} / ${i.unit}</div>
+          </div>
+          <div class="qty">
+            <button type="button" aria-label="Уменьшить" onclick="changeQty('${i.id}',-1)">−</button>
+            <output id="qty-${i.id}">0</output>
+            <button type="button" aria-label="Увеличить" onclick="changeQty('${i.id}',1)">+</button>
+          </div>
+        </div>`;
+    }).join('');
+    const pickedCount = c.items.reduce((n,i) => n + quantities[i.id], 0);
+    return `
+      <article class="service" id="cat-${c.id}">
+        <div class="service-head" onclick="toggleCategory('${c.id}')">
+          <div class="service-name">${c.name}<small>${c.hint}${pickedCount ? ' · выбрано: ' + pickedCount : ''}</small></div>
+          <div class="chev">▾</div>
+        </div>
+        <div class="variants">${variants}</div>
+      </article>`;
+  }).join('');
+}
+function toggleCategory(id){
+  document.getElementById('cat-' + id).classList.toggle('open');
+}
 function changeQty(id,delta){
-  quantities[id] = Math.max(0,quantities[id] + delta);
+  const item = ITEMS[id];
+  /* «Другая работа» — не умножаем: либо выбрана, либо нет */
+  quantities[id] = (item.price === null)
+    ? Math.min(1, Math.max(0, quantities[id] + delta))
+    : Math.max(0, quantities[id] + delta);
   document.getElementById('qty-' + id).textContent = quantities[id];
+  const pick = document.getElementById('pick-' + id);
+  if(pick){
+    if(quantities[id] > 0){
+      pick.style.display = 'inline';
+      pick.textContent = item.price === null ? 'выбрано' : '× ' + quantities[id];
+    } else {
+      pick.style.display = 'none';
+    }
+  }
   renderTotals();
 }
-
+/* Сумма только по работам с ценой (кроме «Другой работы») */
 function baseTotal(){
-  return services.reduce((sum,s) => sum + s.price * quantities[s.id],0);
+  return Object.keys(ITEMS).reduce((sum,id) => {
+    const item = ITEMS[id];
+    return item.price === null ? sum : sum + item.price * quantities[id];
+  }, 0);
 }
-
+function hasOther(){
+  return quantities['other1'] > 0;
+}
+function selectedCount(){
+  return Object.values(quantities).filter(q => q > 0).length;
+}
 function renderTotals(){
   const base = baseTotal();
-  const urgent = document.getElementById('urgent').checked;
-  const total = base ? (urgent ? Math.round(base * 1.2) + (base * 1.2 < 1500 ? 500 : 0) : base) : 0;
-
-  document.getElementById('count').textContent =
-    Object.values(quantities).reduce((a,b) => a + b,0);
+  const urgentOn = document.getElementById('urgent') && document.getElementById('urgent').checked;
+  let total = base;
+  if(base > 0 && urgentOn){
+    total = Math.max(Math.round(base * (1 + URGENT_RATE)), MIN_URGENT_TOTAL);
+  }
+  document.getElementById('count').textContent = selectedCount();
   document.getElementById('subtotal').textContent = rub(base);
   document.getElementById('sumBase').textContent = rub(base);
-  document.getElementById('sumUrgent').textContent = rub(total - base);
   document.getElementById('sumTotal').textContent = rub(total);
-
-  return {base,total,urgent};
+  document.getElementById('sumUrgent').textContent = rub(total - base);
+  document.getElementById('rowUrgent').style.display = (total - base) > 0 ? 'flex' : 'none';
+  document.getElementById('rowOther').style.display = hasOther() ? 'flex' : 'none';
+  document.getElementById('otherHint').style.display = hasOther() ? 'block' : 'none';
+  return {base, total, urgent: urgentOn && base > 0};
 }
-
-function goStep(n){
-  if(n === 2 && baseTotal() === 0){
-    alert('Выберите хотя бы одну услугу.');
-    return;
-  }
-
-  if(n === 3){
-    const typedName = document.getElementById('name').value.trim();
-    const name = typedName || telegramDisplayName();
-    const address = document.getElementById('address').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-
-    if(!name){
-      alert('Не удалось получить имя из Telegram. Пожалуйста, введите имя.');
-      goStep(2);
-      return;
-    }
-
-    if(!address){
-      alert('Заполните адрес.');
-      goStep(2);
-      return;
-    }
-
-    const chosen = services
-      .filter(s => quantities[s.id] > 0)
-      .map(s => `${s.name} — ${quantities[s.id]} × ${rub(s.price)} = ${rub(s.price * quantities[s.id])}`);
-
-    const t = renderTotals();
-    const time = document.querySelector('input[name="time"]:checked').value;
-    const details = document.getElementById('details').value.trim();
-
-    document.getElementById('summary').innerHTML = `
-      <div class="summary-row"><span>Имя</span><strong>${escapeHtml(name)}</strong></div>
-      ${phone ? `<div class="summary-row"><span>Телефон</span><strong>${escapeHtml(phone)}</strong></div>` : ''}
-      <div class="summary-row"><span>Адрес</span><strong>${escapeHtml(address)}</strong></div>
-      <div class="summary-row"><span>Время</span><strong>${escapeHtml(time)}</strong></div>
-      ${chosen.map(x => `<div class="summary-row"><span>${escapeHtml(x)}</span></div>`).join('')}
-      <div class="summary-row"><span>Срочный вызов</span><strong>${t.urgent ? 'Да (+20%)' : 'Нет'}</strong></div>
-      ${details ? `<div class="summary-row"><span>Комментарий</span><strong>${escapeHtml(details)}</strong></div>` : ''}
-    `;
-  }
-
+/* ============ НАВИГАЦИЯ ПО ШАГАМ ============ */
+function setStep(n){
+  currentStep = n;
   document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
   document.getElementById('step' + n).classList.add('active');
-  [1,2,3].forEach(i => document.getElementById('dot' + i).classList.toggle('active',i <= n));
-  window.scrollTo({top:0,behavior:'smooth'});
+  [1,2,3].forEach(i => {
+    const d = document.getElementById('dot' + i);
+    d.classList.toggle('active', i === n);
+    d.classList.toggle('done', i < n);
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+  updateBackButton();
 }
-
-function escapeHtml(value){
-  return String(value).replace(/[&<>"']/g,c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
-}
-
-async function sendOrder(){
-  const btn = document.getElementById('sendBtn');
-  const tg = window.Telegram && window.Telegram.WebApp;
-
-  if(!tg || !tg.initData){
-    showNotice('Откройте приложение через Telegram-бота, чтобы отправить заявку.','error');
+function goStep(n){
+  if(n > 1 && baseTotal() === 0 && !hasOther()){
+    showNotice('notice1', 'Выберите хотя бы одну услугу, чтобы продолжить.', 'error');
     return;
   }
-
-  const t = renderTotals();
-  const chosen = services
-    .filter(s => quantities[s.id] > 0)
-    .map(s => `${s.name}: ${quantities[s.id]} × ${s.price} ₽`);
-
-  const user = telegramUser();
-  const telegramName = telegramDisplayName();
-  const telegramUsername = user.username ? '@' + user.username : '';
-
-  const enteredName = document.getElementById('name').value.trim();
-  const finalName = enteredName || telegramName;
-
+  if(n > 2){
+    let ok = true;
+    const name = document.getElementById('name').value.trim() || telegramDisplayName();
+    const address = document.getElementById('address').value.trim();
+    const timeEl = document.querySelector('input[name="time"]:checked');
+    setFieldError('f-name', !name);
+    setFieldError('f-address', !address);
+    setFieldError('f-time', !timeEl);
+    if(!name){ showNotice('notice2', 'Не удалось определить имя из Telegram — введите его вручную.', 'error'); ok = false; }
+    else if(!address){ showNotice('notice2', 'Укажите адрес, куда приехать.', 'error'); ok = false; }
+    else if(!timeEl){ showNotice('notice2', 'Выберите, когда удобно принять мастера.', 'error'); ok = false; }
+    else if(hasOther() && !document.getElementById('details').value.trim()){
+      setFieldError('f-details', true);
+      showNotice('notice2', 'Опишите задачу в комментарии — по ней мастер оценит «Другую работу».', 'error');
+      ok = false;
+    }
+    if(!ok) return;
+    buildSummary(name);
+  }
+  setStep(n);
+}
+function setFieldError(fieldId, on){
+  const f = document.getElementById(fieldId);
+  if(f) f.classList.toggle('error', !!on);
+}
+/* ============ ШАГ 3: СВОДКА ============ */
+function chosenLines(){
+  return Object.keys(ITEMS)
+    .filter(id => quantities[id] > 0)
+    .map(id => {
+      const i = ITEMS[id];
+      return i.price === null
+        ? {name:'Другая работа — ' + (i.name), sum:'по договорённости'}
+        : {name:i.name, sum:quantities[id] + ' × ' + rub(i.price) + ' = ' + rub(i.price * quantities[id])};
+    });
+}
+function buildSummary(name){
+  const phone = document.getElementById('phone').value.trim();
+  const address = document.getElementById('address').value.trim();
+  const timeEl = document.querySelector('input[name="time"]:checked');
+  const slot = document.getElementById('slot').value;
   const details = document.getElementById('details').value.trim();
-
-  // Оставляем только комментарий клиента и username Telegram.
-  // Telegram ID и ссылку на профиль не отправляем.
+  const t = renderTotals();
+  const rows = [
+    ['Имя', escapeHtml(name)],
+    phone ? ['Телефон', escapeHtml(phone)] : null,
+    ['Адрес', escapeHtml(address)],
+    ['Когда', escapeHtml(timeEl.value) + (slot ? ', ' + escapeHtml(slot) : '')]
+  ].filter(Boolean).map(([k,v]) =>
+    `<div class="summary-row"><span class="head">${k}</span><span>${v}</span></div>`
+  ).join('');
+  const serviceRows = chosenLines().map(x =>
+    `<div class="summary-row"><span>${escapeHtml(x.name)}</span><span class="sum">${escapeHtml(x.sum)}</span></div>`
+  ).join('');
+  document.getElementById('summary').innerHTML = rows + serviceRows +
+    `<div class="summary-row"><span class="head">Срочный вызов</span><span>${t.urgent ? 'Да' : 'Нет'}</span></div>` +
+    (details ? `<div class="summary-row"><span class="head">Комментарий</span><span>${escapeHtml(details)}</span></div>` : '');
+}
+/* ============ ОТПРАВКА ============ */
+async function sendOrder(){
+  if(sending) return;
+  const btn = document.getElementById('sendBtn');
+  const tg = window.Telegram && window.Telegram.WebApp;
+  if(!tg || !tg.initData){
+    showNotice('notice3', 'Откройте приложение через Telegram-бота, чтобы отправить заявку.', 'error');
+    return;
+  }
+  const t = renderTotals();
+  const chosen = Object.keys(ITEMS)
+    .filter(id => quantities[id] > 0)
+    .map(id => {
+      const i = ITEMS[id];
+      return i.price === null
+        ? i.name + ' (по договорённости)'
+        : i.name + ': ' + quantities[id] + ' × ' + i.price + ' ₽';
+    });
+  const user = telegramUser();
+  const enteredName = document.getElementById('name').value.trim();
+  const finalName = enteredName || telegramDisplayName() || 'Клиент Telegram';
   const commentParts = [];
+  const details = document.getElementById('details').value.trim();
   if(details) commentParts.push(details);
-  if(telegramUsername) commentParts.push('Telegram: ' + telegramUsername);
-
+  if(user.username) commentParts.push('Telegram: @' + user.username);
+  if(t.urgent) commentParts.push('Срочный вызов: да');
   const data = {
     initData: tg.initData,
-    name: finalName || 'Клиент Telegram',
+    name: finalName,
     phone: document.getElementById('phone').value.trim(),
     address: document.getElementById('address').value.trim(),
     time: document.querySelector('input[name="time"]:checked').value,
     comment: commentParts.join('\n'),
-    urgent: t.urgent ? 'Да (+20%)' : 'Нет',
     services: chosen.join('\n'),
-    total: rub(t.total)
+    base: Math.round(t.base),
+    total: Math.round(t.total)
   };
-
+  sending = true;
   btn.disabled = true;
   btn.textContent = 'Отправляем…';
-
   try{
-    await fetch(SCRIPT_URL,{
+    await fetch(SCRIPT_URL, {
       method:'POST',
       mode:'no-cors',
       headers:{'Content-Type':'text/plain;charset=utf-8'},
       body:JSON.stringify(data)
     });
-
-    showNotice('Заявка передана. Дождитесь подтверждения мастера.','ok');
-
-    if(tg.HapticFeedback){
-      tg.HapticFeedback.notificationOccurred('success');
-    }
+    showNotice('notice3', 'Заявка передана. Мастер свяжется с вами для подтверждения.', 'ok');
+    if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
   }catch(err){
-    showNotice('Не удалось отправить заявку. Проверьте интернет и попробуйте ещё раз.','error');
+    showNotice('notice3', 'Не удалось отправить заявку. Проверьте интернет и попробуйте ещё раз.', 'error');
   }finally{
+    sending = false;
     btn.disabled = false;
     btn.textContent = 'Отправить заявку';
   }
 }
-
-function showNotice(message,type){
-  const el = document.getElementById('notice');
+function showNotice(id, message, type){
+  const el = document.getElementById(id);
+  if(!el) return;
   el.textContent = message;
   el.className = 'notice show ' + type;
 }
-
-// Автоматически подставляем имя из Telegram в поле имени.
-document.addEventListener('DOMContentLoaded',() => {
-  const nameField = document.getElementById('name');
-  if(nameField && !nameField.value.trim()){
-    nameField.value = telegramDisplayName();
+/* ============ КНОПКА «НАЗАД» TELEGRAM ============ */
+function updateBackButton(){
+  const tg = window.Telegram && window.Telegram.WebApp;
+  if(!tg || !tg.BackButton) return;
+  if(currentStep > 1){
+    tg.BackButton.show();
+  } else {
+    tg.BackButton.hide();
   }
+}
+/* ============ СТАРТ ============ */
+document.addEventListener('DOMContentLoaded', () => {
+  const nameField = document.getElementById('name');
+  if(nameField && !nameField.value.trim()) nameField.value = telegramDisplayName();
+  updateBackButton();
 });
-
-renderServices();
-renderTotals();
-
 if(window.Telegram && window.Telegram.WebApp){
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
+  if(Telegram.WebApp.BackButton){
+    Telegram.WebApp.BackButton.onClick(() => { if(currentStep > 1) goStep(currentStep - 1); });
+  }
 }
+renderServices();
+renderTotals();
 </script>
 </body>
 </html>
