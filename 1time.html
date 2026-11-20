@@ -1,256 +1,144 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мастер на час</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--tg-theme-bg-color, #fff);
-      color: var(--tg-theme-text-color, #111);
-      margin: 0; padding: 16px;
-      padding-bottom: 110px;
-    }
-    h1 { font-size: 22px; margin: 0 0 4px; }
-    .hint { color: var(--tg-theme-hint-color, #888); font-size: 13px; margin-bottom: 16px; }
-    .section-title { font-weight: 600; margin: 18px 0 8px; font-size: 15px; }
-    .service {
-      display: flex; align-items: center; justify-content: space-between;
-      background: var(--tg-theme-secondary-bg-color, #f2f2f2);
-      border-radius: 12px; padding: 12px; margin-bottom: 8px;
-    }
-    .service .info { flex: 1; }
-    .service .name { font-weight: 500; font-size: 15px; }
-    .service .price { color: var(--tg-theme-hint-color, #888); font-size: 13px; margin-top: 2px; }
-    .qty { display: flex; align-items: center; gap: 10px; }
-    .qty button {
-      width: 32px; height: 32px; border-radius: 8px; border: none;
-      background: var(--tg-theme-button-color, #2481cc);
-      color: #fff; font-size: 18px; cursor: pointer; padding: 0;
-    }
-    .qty span { min-width: 20px; text-align: center; font-weight: 600; }
-    .row { display: flex; gap: 8px; margin-bottom: 10px; }
-    .chip {
-      flex: 1; padding: 10px; border-radius: 10px; text-align: center;
-      background: var(--tg-theme-secondary-bg-color, #f2f2f2);
-      border: 2px solid transparent; font-size: 14px; cursor: pointer;
-    }
-    .chip.active {
-      border-color: var(--tg-theme-button-color, #2481cc);
-      font-weight: 600;
-    }
-    input, textarea, select {
-      width: 100%; padding: 12px; margin-bottom: 10px;
-      border: 1px solid var(--tg-theme-hint-color, #ccc);
-      border-radius: 10px; font-size: 15px;
-      background: var(--tg-theme-secondary-bg-color, #f2f2f2);
-      color: var(--tg-theme-text-color, #111);
-    }
-    .urgent {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--tg-theme-secondary-bg-color, #f2f2f2);
-      border-radius: 10px; padding: 12px; margin: 12px 0; font-size: 14px;
-    }
-    .summary {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: var(--tg-theme-bg-color, #fff);
-      padding: 12px 16px 16px;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
-    }
-    .summary .line { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px; color: var(--tg-theme-hint-color, #888); }
-    .summary .line.total { font-size: 17px; font-weight: 700; color: var(--tg-theme-text-color, #111); }
-    #send-btn {
-      width: 100%; padding: 14px; margin-top: 8px;
-      background: var(--tg-theme-button-color, #2481cc);
-      color: var(--tg-theme-button-text-color, #fff);
-      border: none; border-radius: 12px;
-      font-size: 16px; font-weight: 600; cursor: pointer;
-    }
-    #send-btn:disabled { opacity: 0.5; }
-    #status { text-align: center; font-size: 14px; margin-top: 8px; min-height: 18px; }
-    .success { color: #2ecc71; }
-    .error { color: #e74c3c; }
-  </style>
-</head>
-<body>
-  <h1>Мастер на час</h1>
-  <div class="hint">Выберите услуги — стоимость посчитается сама</div>
-
-  <div class="section-title">Услуги</div>
-  <div id="services-list"></div>
-
-  <div class="section-title">Когда приехать?</div>
-  <div class="row" id="days"></div>
-  <div class="row" id="dayparts"></div>
-
-  <label class="urgent">
-    <input type="checkbox" id="urgent" style="width:auto">
-    <span>Срочный выезд (+50% к стоимости)</span>
-  </label>
-
-  <div class="section-title">Ваши данные</div>
-  <input type="text" id="name" placeholder="Ваше имя">
-  <input type="tel" id="phone" placeholder="Телефон: +7 999 000-00-00">
-  <input type="text" id="address" placeholder="Адрес: город, улица, дом, квартира">
-  <textarea id="comment" rows="2" placeholder="Комментарий: этаж, код домофона..."></textarea>
-
-  <div class="summary">
-    <div class="line"><span>Без наценки</span><span id="subtotal">0 ₽</span></div>
-    <div class="line total"><span>Итого</span><span id="total">0 ₽</span></div>
-    <button type="button" id="send-btn">Отправить заявку</button>
-    <div id="status"></div>
-  </div>
-
-<script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoOYxRmzuUwEHptIT8802Ffqqinpnl3cjZEZagmXf8g-Wnq9bfa3pN3d0L26mI7uVx/exec';
-
-  const tg = window.Telegram.WebApp;
-  tg.ready();
-  tg.expand();
-
-  // ── Услуги и цены (правьте под себя) ──
-  const SERVICES = [
-    { id: 'sbor',   name: 'Сборка мебели',          price: 900 },
-    { id: 'polka',  name: 'Повесить полку/картину', price: 500 },
-    { id: 'santeh', name: 'Сантехника (кран, смыв)', price: 700 },
-    { id: 'elek',   name: 'Электрика (розетка, лампа)', price: 600 },
-    { id: 'zamok',  name: 'Замена замка',           price: 800 },
-    { id: 'dver',   name: 'Регулировка дверей',     price: 500 }
-  ];
-  const DAYS = ['Сегодня', 'Завтра', 'В выходные'];
-  const DAYPARTS = ['Утро', 'День', 'Вечер'];
-
-  const counts = {};
-  SERVICES.forEach(s => counts[s.id] = 0);
-  let day = DAYS[0], daypart = DAYPARTS[1];
-
-  const fmt = n => n.toLocaleString('ru-RU') + ' ₽';
-
-  function renderServices() {
-    document.getElementById('services-list').innerHTML = SERVICES.map(s => `
-      <div class="service">
-        <div class="info">
-          <div class="name">${s.name}</div>
-          <div class="price">${fmt(s.price)}</div>
-        </div>
-        <div class="qty">
-          <button data-id="${s.id}" data-d="-1">−</button>
-          <span id="q-${s.id}">${counts[s.id]}</span>
-          <button data-id="${s.id}" data-d="1">+</button>
-        </div>
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Калькулятор мастера</title><script src="https://telegram.org/js/telegram-web-app.js"></script><style>*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}body{background:#f2f5f9;color:#1e293b;padding:16px;padding-bottom:100px}.header{text-align:center;margin-bottom:20px}.header h1{font-size:22px;font-weight:800;color:#0f172a}.header p{font-size:14px;color:#64748b;margin-top:4px}.category{background:#fff;border-radius:16px;margin-bottom:12px;box-shadow:0 4px 15px rgba(0,0,0,0.03);overflow:hidden;border:1px solid #e2e8f0}.cat-header{padding:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:#fff;transition:background 0.2s}.cat-header:active{background:#f8fafc}.cat-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;color:#1e293b}.cat-icon{font-size:20px}.cat-arrow{color:#94a3b8;transition:transform 0.3s}.category.open .cat-arrow{transform:rotate(180deg)}.cat-content{max-height:0;overflow:hidden;transition:max-height 0.3s ease-out;background:#fff}.category.open .cat-content{max-height:1000px}.service-item{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid #f1f5f9}.service-info{flex:1;padding-right:10px}.service-name{font-size:15px;font-weight:600;color:#334155}.service-price{font-size:13px;color:#3b82f6;font-weight:600;margin-top:2px}.counter{display:flex;align-items:center;gap:12px;background:#f8fafc;padding:4px;border-radius:10px;border:1px solid #e2e8f0}.counter button{width:32px;height:32px;border-radius:8px;border:none;background:#fff;color:#3b82f6;font-size:20px;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.05);transition:all 0.1s}.counter button:active{transform:scale(0.9);background:#eff6ff}.counter span{font-size:15px;font-weight:700;width:20px;text-align:center;color:#1e293b}.total-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:16px;border-top:1px solid #e2e8f0;box-shadow:0 -4px 20px rgba(0,0,0,0.05);display:flex;justify-content:space-between;align-items:center;z-index:100}.total-info p{font-size:13px;color:#64748b;font-weight:500}.total-info h2{font-size:24px;font-weight:800;color:#0f172a;margin-top:2px}.btn-next{background:#3b82f6;color:#fff;border:none;padding:14px 24px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(59,130,246,0.3);transition:transform 0.1s}.btn-next:active{transform:scale(0.96)}.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.5);backdrop-filter:blur(4px);z-index:200;display:none;align-items:flex-end}.modal.show{display:flex}.modal-content{background:#fff;width:100%;border-radius:24px 24px 0 0;padding:24px;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275)}.modal.show .modal-content{transform:translateY(0)}.modal h3{font-size:20px;font-weight:800;margin-bottom:16px}.input-group{margin-bottom:16px}.input-group label{display:block;font-size:14px;font-weight:600;color:#475569;margin-bottom:6px}.input-group input{width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:12px;font-size:16px;outline:none;background:#f8fafc;transition:border 0.2s}.input-group input:focus{border-color:#3b82f6;background:#fff}.input-group small{display:block;font-size:12px;color:#94a3b8;margin-top:4px}.btn-submit{width:100%;background:#10b981;color:#fff;border:none;padding:16px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(16,185,129,0.3);margin-top:10px;display:flex;justify-content:center;align-items:center;gap:8px}.btn-submit:active{transform:scale(0.98)}.btn-close{background:transparent;border:none;color:#94a3b8;font-size:14px;font-weight:600;width:100%;margin-top:16px;cursor:pointer;padding:10px}</style></head><body><div class="header"><h1>Калькулятор услуг</h1><p>Выберите нужное, я сразу посчитаю</p></div><div id="categories-container"></div><div class="total-bar"><div class="total-info"><p>Примерная стоимость:</p><h2><span id="total-price">0</span> ₽</h2></div><button class="btn-next" onclick="openModal()">Далее →</button></div><div class="modal" id="order-modal"><div class="modal-content"><h3>Оформление заявки</h3><div class="input-group"><label>Ваше имя</label><input type="text" id="client-name" placeholder="Как к вам обращаться?"></div><div class="input-group"><label>Телефон (необязательно)</label><input type="tel" id="client-phone" placeholder="+7 (999) 000-00-00"><small>Если не укажете, я напишу вам прямо в Telegram.</small></div><div class="input-group"><label>Адрес или район</label><input type="text" id="client-address" placeholder="Улица, дом или район"></div><button class="btn-submit" onclick="submitOrder()">✅ Отправить мастеру</button><button class="btn-close" onclick="closeModal()">Отмена</button></div></div><script>
+const tg = window.Telegram.WebApp;
+tg.expand(); // Разворачиваем на весь экран
+const user = tg.initDataUnsafe?.user;
+if(user && user.first_name){
+  document.getElementById('client-name').value = user.first_name;
+}
+const catalog = [
+  {
+    title: "Сантехника", icon: "🚰",
+    items: [
+      { id: "s1", name: "Замена смесителя", price: 1000 },
+      { id: "s2", name: "Установка унитаза", price: 2500 },
+      { id: "s3", name: "Устранение протечки", price: 800 }
+    ]
+  },
+  {
+    title: "Электрика", icon: "⚡",
+    items: [
+      { id: "e1", name: "Установка розетки", price: 600 },
+      { id: "e2", name: "Монтаж люстры", price: 1200 },
+      { id: "e3", name: "Замена выключателя", price: 500 }
+    ]
+  },
+  {
+    title: "Сборка мебели", icon: "🛠",
+    items: [
+      { id: "m1", name: "Сборка шкафа", price: 2000 },
+      { id: "m2", name: "Сборка кухни", price: 4000 },
+      { id: "m3", name: "Сборка стола/стула", price: 800 }
+    ]
+  },
+  {
+    title: "Мелкий ремонт", icon: "🔨",
+    items: [
+      { id: "r1", name: "Повесить полку", price: 800 },
+      { id: "r2", name: "Повесить телевизор", price: 1500 },
+      { id: "r3", name: "Регулировка двери", price: 700 }
+    ]
+  }
+];
+const cart = {};
+const container = document.getElementById('categories-container');
+catalog.forEach(cat => {
+  const catDiv = document.createElement('div');
+  catDiv.className = 'category';
+  catDiv.innerHTML = `
+    <div class="cat-header" onclick="toggleCat(this)">
+      <div class="cat-title"><span class="cat-icon">${cat.icon}</span>${cat.title}</div>
+      <div class="cat-arrow">▼</div>
+    </div>
+    <div class="cat-content" id="cat-${cat.title.replace(/\s/g,'')}"></div>
+  `;
+  container.appendChild(catDiv);
+  const content = catDiv.querySelector('.cat-content');
+  cat.items.forEach(item => {
+    cart[item.id] = 0;
+    const sDiv = document.createElement('div');
+    sDiv.className = 'service-item';
+    sDiv.innerHTML = `
+      <div class="service-info">
+        <div class="service-name">${item.name}</div>
+        <div class="service-price">${item.price} ₽</div>
       </div>
-    `).join('');
-  }
-
-  function renderChips(id, arr, current) {
-    document.getElementById(id).innerHTML = arr.map(v =>
-      `<div class="chip ${v === current ? 'active' : ''}" data-val="${v}">${v}</div>`
-    ).join('');
-  }
-
-  function recalc() {
-    const subtotal = SERVICES.reduce((sum, s) => sum + s.price * counts[s.id], 0);
-    const urgent = document.getElementById('urgent').checked;
-    const total = urgent ? Math.round(subtotal * 1.5) : subtotal;
-    document.getElementById('subtotal').textContent = fmt(subtotal);
-    document.getElementById('total').textContent = fmt(total);
-    return { subtotal, total, urgent };
-  }
-
-  document.getElementById('services-list').addEventListener('click', e => {
-    const btn = e.target.closest('button');
-    if (!btn) return;
-    const id = btn.dataset.id;
-    counts[id] = Math.max(0, counts[id] + Number(btn.dataset.d));
-    document.getElementById('q-' + id).textContent = counts[id];
-    recalc();
+      <div class="counter">
+        <button onclick="updateCart('${item.id}', -1, ${item.price})">−</button>
+        <span id="qty-${item.id}">0</span>
+        <button onclick="updateCart('${item.id}', 1, ${item.price})">+</button>
+      </div>
+    `;
+    content.appendChild(sDiv);
   });
-  document.getElementById('urgent').addEventListener('change', recalc);
-
-  document.getElementById('days').addEventListener('click', e => {
-    const chip = e.target.closest('.chip');
-    if (!chip) return;
-    day = chip.dataset.val;
-    renderChips('days', DAYS, day);
-  });
-  document.getElementById('dayparts').addEventListener('click', e => {
-    const chip = e.target.closest('.chip');
-    if (!chip) return;
-    daypart = chip.dataset.val;
-    renderChips('dayparts', DAYPARTS, daypart);
-  });
-
-  // ── Отправка заявки ──
-  document.getElementById('send-btn').addEventListener('click', async () => {
-    const status = document.getElementById('status');
-    const btn = document.getElementById('send-btn');
-
-    const picked = SERVICES.filter(s => counts[s.id] > 0);
-    if (picked.length === 0) {
-      status.className = 'error';
-      status.textContent = 'Выберите хотя бы одну услугу';
-      return;
+});
+function toggleCat(header) {
+  const cat = header.parentElement;
+  cat.classList.toggle('open');
+}
+function updateCart(id, delta, price) {
+  if (cart[id] + delta < 0) return;
+  cart[id] += delta;
+  document.getElementById(`qty-${id}`).innerText = cart[id];
+  let total = 0;
+  for (let key in cart) { total += cart[key] * getPrice(key); }
+  document.getElementById('total-price').innerText = total;
+}
+function getPrice(id) {
+  for(let cat of catalog) {
+    for(let item of cat.items) {
+      if(item.id === id) return item.price;
     }
-    if (!document.getElementById('name').value.trim() ||
-        !document.getElementById('phone').value.trim() ||
-        !document.getElementById('address').value.trim()) {
-      status.className = 'error';
-      status.textContent = 'Заполните имя, телефон и адрес';
-      return;
+  }
+  return 0;
+}
+function openModal() {
+  let total = 0;
+  for (let key in cart) { total += cart[key] * getPrice(key); }
+  if (total === 0) {
+    alert("Пожалуйста, выберите хотя бы одну услугу.");
+    return;
+  }
+  document.getElementById('order-modal').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('order-modal').classList.remove('show');
+}
+function submitOrder() {
+  const name = document.getElementById('client-name').value.trim() || "Клиент";
+  const phone = document.getElementById('client-phone').value.trim() || "Не указан";
+  const address = document.getElementById('client-address').value.trim();
+  if (!address) { alert("Пожалуйста, укажите адрес или район."); return; }
+  let services = [];
+  let total = 0;
+  for (let key in cart) {
+    if (cart[key] > 0) {
+      services.push({ name: getServiceName(key), quantity: cart[key], price: cart[key] * getPrice(key) });
+      total += cart[key] * getPrice(key);
     }
-
-    const { subtotal, total, urgent } = recalc();
-
-    // Собираем заявку в JSON — ровно в том виде, какой ждёт Apps Script
-    const payload = {
-      initData: tg.initData || '',
-      name: document.getElementById('name').value.trim(),
-      phone: document.getElementById('phone').value.trim(),
-      address: document.getElementById('address').value.trim(),
-      time: day,
-      daypart: daypart,
-      services: picked.map(s => s.name + ' × ' + counts[s.id]).join(', '),
-      urgent: urgent ? 'Да' : 'Нет',
-      subtotal: fmt(subtotal),
-      total: fmt(total),
-      comment: document.getElementById('comment').value.trim()
-    };
-
-    status.className = '';
-    status.textContent = 'Отправляем...';
-    btn.disabled = true;
-
-    try {
-      // Без заголовков Content-Type — так Apps Script не режет запрос CORS'ом
-      const response = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      });
-      const result = await response.text();
-
-      if (result === 'OK') {
-        status.className = 'success';
-        status.textContent = '✅ Заявка отправлена! Скоро свяжусь с вами.';
-        tg.HapticFeedback?.notificationOccurred('success');
-      } else {
-        status.className = 'error';
-        status.textContent = '❌ Ошибка: ' + result;
-      }
-    } catch (err) {
-      status.className = 'error';
-      status.textContent = '❌ Ошибка сети. Проверьте подключение.';
+  }
+  const orderData = {
+    name: name,
+    phone: phone,
+    address: address,
+    services: services,
+    total: total,
+    telegram_username: user?.username || "нет_ника",
+    urgent: false
+  };
+  tg.sendData(JSON.stringify(orderData));
+  closeModal();
+  document.getElementById('total-price').innerText = "0";
+  document.getElementById('client-address').value = "";
+  for (let key in cart) { 
+    cart[key] = 0; 
+    document.getElementById(`qty-${key}`).innerText = "0"; 
+  }
+}
+function getServiceName(id) {
+  for(let cat of catalog) {
+    for(let item of cat.items) {
+      if(item.id === id) return item.name;
     }
-    btn.disabled = false;
-  });
-
-  // ── Стартовый рендер ──
-  renderServices();
-  renderChips('days', DAYS, day);
-  renderChips('dayparts', DAYPARTS, daypart);
-  recalc();
-</script>
-</body>
-</html>
+  }
+}
+</script></body></html>
